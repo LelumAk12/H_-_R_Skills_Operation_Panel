@@ -1,0 +1,213 @@
+.ops-student-detail-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+.ops-student-detail-main {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+}
+.ops-student-detail-content {
+  flex: 1;
+  padding: 96px 48px 48px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ops-student-profile-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-student-profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.ops-student-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ops-student-profile-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0;
+}
+.ops-student-profile-id {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 0;
+}
+.ops-student-profile-status {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  width: fit-content;
+}
+.ops-student-profile-status.active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.ops-student-details-grid {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 24px;
+}
+.ops-student-left-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ops-student-stats-card,
+.ops-student-contact-card,
+.ops-student-overview-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-student-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 20px 0;
+}
+.ops-student-stat-item {
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+.ops-student-stat-item:last-child {
+  margin-bottom: 0;
+}
+.ops-student-stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2847;
+  margin: 0 0 8px 0;
+}
+.ops-student-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0;
+}
+.ops-student-contact-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+.ops-student-contact-row:last-child {
+  border-bottom: none;
+}
+.ops-student-contact-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2847;
+}
+.ops-student-contact-value {
+  font-size: 14px;
+  color: #6b7280;
+}
+.ops-student-subsection-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 16px 0;
+}
+.ops-student-personal-info {
+  margin-bottom: 32px;
+}
+.ops-student-info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ops-student-info-table tr {
+  border-bottom: 1px solid #f3f4f6;
+}
+.ops-student-info-table tr:last-child {
+  border-bottom: none;
+}
+.ops-student-info-label,
+.ops-student-info-value {
+  padding: 12px 0;
+  font-size: 14px;
+}
+.ops-student-info-label {
+  font-weight: 600;
+  color: #1a2847;
+  width: 40%;
+}
+.ops-student-info-value {
+  color: #6b7280;
+}
+.ops-student-activity-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ops-student-activity-table thead {
+  background-color: #f9fafb;
+}
+.ops-student-activity-table th {
+  padding: 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a2847;
+}
+.ops-student-activity-table td {
+  padding: 16px 12px;
+  font-size: 14px;
+  color: #1a2847;
+  border-top: 1px solid #f3f4f6;
+}
+.ops-student-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ops-student-progress-bar {
+  flex: 1;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.ops-student-progress-fill {
+  height: 100%;
+  background-color: #1a2847;
+  border-radius: 4px;
+}
+.ops-student-progress-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  min-width: 40px;
+}
+.ops-student-activity-status {
+  font-size: 13px;
+  font-weight: 600;
+}
+.ops-student-activity-status.completed {
+  color: #065f46;
+}
+.ops-student-activity-status.in-progress {
+  color: #d97706;
+}
+.ops-student-activity-status.not-started {
+  color: #6b7280;
+}

@@ -1,0 +1,215 @@
+.ops-edit-user-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+.ops-edit-user-main {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+}
+.ops-edit-user-content {
+  flex: 1;
+  padding: 96px 48px 48px;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ops-edit-user-profile-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-edit-user-profile-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.ops-edit-user-profile-info {
+  flex: 1;
+}
+.ops-edit-user-profile-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 4px 0;
+}
+.ops-edit-user-profile-email {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+}
+.ops-edit-user-upload-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #1a2847;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ops-edit-user-upload-btn:hover {
+  background-color: #0f1a2e;
+}
+.ops-edit-user-upload-icon {
+  width: 16px;
+  height: 16px;
+}
+.ops-edit-user-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-edit-user-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a2847;
+  margin: 0 0 24px 0;
+}
+.ops-edit-user-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ops-edit-user-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.ops-edit-user-form-group {
+  display: flex;
+  flex-direction: column;
+}
+.ops-edit-user-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2847;
+  margin-bottom: 8px;
+}
+.ops-edit-user-input,
+.ops-edit-user-select {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1a2847;
+}
+.ops-edit-user-input:focus,
+.ops-edit-user-select:focus {
+  outline: none;
+  border-color: #1a2847;
+}
+.ops-edit-user-input:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+}
+.ops-edit-user-account-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ops-edit-user-account-item {
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.ops-edit-user-account-item.danger {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+.ops-edit-user-account-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2847;
+  margin: 0 0 4px 0;
+}
+.ops-edit-user-account-title.danger {
+  color: #dc2626;
+}
+.ops-edit-user-account-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+.ops-edit-user-account-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.ops-edit-user-account-btn.reset {
+  background-color: #fbbf24;
+  color: #1a2847;
+}
+.ops-edit-user-account-btn.reset:hover {
+  background-color: #f59e0b;
+}
+.ops-edit-user-account-btn.deactivate {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+.ops-edit-user-account-btn.deactivate:hover {
+  background-color: #b91c1c;
+}
+.ops-edit-user-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.ops-edit-user-save-btn {
+  padding: 12px 32px;
+  background-color: #1a2847;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ops-edit-user-save-btn:hover {
+  background-color: #0f1a2e;
+}
+@media (max-width: 768px) {
+  .ops-edit-user-main {
+    margin-left: 0;
+  }
+  .ops-edit-user-content {
+    padding: 80px 20px 20px;
+  }
+  .ops-edit-user-section {
+    padding: 20px;
+  }
+  .ops-edit-user-profile-section {
+    flex-direction: column;
+    text-align: center;
+  }
+  .ops-edit-user-form-row {
+    grid-template-columns: 1fr;
+  }
+  .ops-edit-user-account-item {
+    flex-direction: column;
+    text-align: center;
+  }
+}

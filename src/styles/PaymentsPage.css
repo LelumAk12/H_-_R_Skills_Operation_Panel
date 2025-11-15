@@ -1,0 +1,243 @@
+.ops-payments-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+.ops-payments-main {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+}
+.ops-payments-content {
+  flex: 1;
+  padding: 96px 48px 48px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ops-payments-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 32px 0;
+}
+.ops-payments-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  border-bottom: 2px solid #e5e7eb;
+}
+.ops-payments-tab {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -2px;
+}
+.ops-payments-tab:hover {
+  color: #1a2847;
+}
+.ops-payments-tab.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+}
+.ops-payments-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.ops-payments-stat-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-payments-stat-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+.ops-payments-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 8px 0;
+}
+.ops-payments-stat-change {
+  font-size: 13px;
+  font-weight: 600;
+}
+.ops-payments-stat-change.positive {
+  color: #10b981;
+}
+.ops-payments-stat-change.negative {
+  color: #ef4444;
+}
+.ops-payments-filter-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
+}
+.ops-payments-filter-btn {
+  padding: 10px 20px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1a2847;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ops-payments-filter-btn:hover {
+  border-color: #d1d5db;
+}
+.ops-payments-filter-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+}
+.ops-payments-table-container {
+  background-color: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-payments-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ops-payments-table thead {
+  background-color: #f9fafb;
+}
+.ops-payments-table th {
+  padding: 16px 24px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a2847;
+}
+.ops-payments-table td {
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 15px;
+}
+.ops-payments-name-cell {
+  color: #1a2847;
+  font-weight: 600;
+}
+.ops-payments-course-cell {
+  color: #6b7280;
+}
+.ops-payments-amount-cell {
+  color: #1a2847;
+  font-weight: 600;
+}
+.ops-payments-date-cell {
+  color: #6b7280;
+}
+.ops-payments-status {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ops-payments-status.complete {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.ops-payments-status.failed {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+.ops-payments-action-btn {
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.ops-payments-action-btn.retry {
+  background-color: #fbbf24;
+  color: #1a2847;
+}
+.ops-payments-action-btn.retry:hover {
+  background-color: #f59e0b;
+}
+.ops-payments-action-btn.refund {
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+.ops-payments-action-btn.refund:hover {
+  background-color: #2563eb;
+}
+.ops-payments-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-top: 1px solid #e5e7eb;
+}
+.ops-payments-pagination-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+.ops-payments-pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+.ops-payments-pagination-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2847;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ops-payments-pagination-btn:hover {
+  background-color: #f9fafb;
+}
+.ops-payments-pagination-btn.active {
+  background-color: #1a2847;
+  color: #ffffff;
+  border-color: #1a2847;
+}
+.ops-payments-pagination-icon {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 768px) {
+  .ops-payments-main {
+    margin-left: 0;
+  }
+  .ops-payments-content {
+    padding: 80px 20px 20px;
+  }
+  .ops-payments-stats {
+    grid-template-columns: 1fr;
+  }
+  .ops-payments-table {
+    font-size: 13px;
+  }
+  .ops-payments-pagination {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

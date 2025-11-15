@@ -1,0 +1,129 @@
+.ops-login-page {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #5a6169;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+.ops-login-card {
+  background-color: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  width: 100%;
+  overflow: hidden;
+}
+.ops-login-left {
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+}
+.ops-login-logo {
+  width: 100%;
+  max-width: 20rem;
+  height: auto;
+}
+.ops-login-title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 8px 0;
+  letter-spacing: 2px;
+  font-family: serif;
+}
+.ops-login-subtitle {
+  font-size: 32px;
+  font-weight: 400;
+  color: #1a2847;
+  margin: 0;
+  font-family: serif;
+}
+.ops-login-right {
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+}
+.ops-login-form {
+  width: 100%;
+}
+.ops-login-form-group {
+  margin-bottom: 28px;
+}
+.ops-login-label {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a2847;
+  margin-bottom: 10px;
+}
+.ops-login-input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1a2847;
+  transition: border-color 0.2s;
+}
+.ops-login-input:focus {
+  outline: none;
+  border-color: #1a2847;
+}
+.ops-login-input::placeholder {
+  color: #9ca3af;
+}
+.ops-login-password-wrapper {
+  position: relative;
+}
+.ops-login-password-toggle {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+.ops-login-icon {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+}
+.ops-login-forgot {
+  text-align: right;
+  margin-bottom: 28px;
+}
+.ops-login-forgot a {
+  font-size: 14px;
+  color: #4b5563;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.ops-login-forgot a:hover {
+  color: #1a2847;
+}
+.ops-login-button {
+  width: 100%;
+  padding: 16px;
+  background-color: #1a2847;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.ops-login-button:hover {
+  background-color: #0f1a2e;
+}

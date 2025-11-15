@@ -1,0 +1,150 @@
+.ops-dashboard-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+.ops-dashboard-main {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+}
+.ops-dashboard-content {
+  flex: 1;
+  padding: 96px 48px 48px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ops-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+.ops-dashboard-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0;
+}
+.ops-dashboard-filter {
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #4b5563;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+.ops-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.ops-stat-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-stat-label {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+.ops-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 8px 0;
+}
+.ops-stat-change {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+.ops-stat-change.positive {
+  color: #10b981;
+}
+.ops-stat-change.new {
+  color: #3b82f6;
+}
+.ops-dashboard-charts {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+}
+.ops-chart-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+.ops-chart-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a2847;
+  margin: 0 0 4px 0;
+}
+.ops-chart-subtitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+.ops-chart-change {
+  font-size: 16px;
+  font-weight: 600;
+  color: #10b981;
+  margin: 0;
+}
+.ops-donut-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.ops-donut-svg {
+  width: 240px;
+  height: 240px;
+}
+.ops-donut-percentage {
+  font-size: 48px;
+  font-weight: 700;
+  fill: #1a2847;
+}
+.ops-donut-label {
+  font-size: 14px;
+  fill: #6b7280;
+}
+.ops-donut-legend {
+  display: flex;
+  gap: 32px;
+}
+.ops-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ops-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.ops-legend-dot.completed {
+  background-color: #3b82f6;
+}
+.ops-legend-dot.in-progress {
+  background-color: #e5e7eb;
+}
+.ops-legend-text {
+  font-size: 14px;
+  color: #6b7280;
+}

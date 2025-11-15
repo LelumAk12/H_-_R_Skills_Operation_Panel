@@ -1,0 +1,255 @@
+.ops-announcement-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+.ops-announcement-main {
+  flex: 1;
+  margin-left: 280px;
+  display: flex;
+  flex-direction: column;
+}
+.ops-announcement-content {
+  flex: 1;
+  padding: 96px 48px 48px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+.ops-announcement-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a2847;
+  margin: 0 0 32px 0;
+}
+.ops-announcement-create-section,
+.ops-announcement-manage-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.ops-announcement-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a2847;
+  margin: 0 0 24px 0;
+}
+.ops-announcement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.ops-announcement-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.ops-announcement-form-group {
+  display: flex;
+  flex-direction: column;
+}
+.ops-announcement-form-group.ops-announcement-description {
+  grid-column: 1;
+}
+.ops-announcement-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2847;
+  margin-bottom: 8px;
+}
+.ops-announcement-input,
+.ops-announcement-select {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1a2847;
+}
+.ops-announcement-input:focus,
+.ops-announcement-select:focus {
+  outline: none;
+  border-color: #1a2847;
+}
+.ops-announcement-textarea {
+  padding: 12px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1a2847;
+  font-family: inherit;
+  resize: vertical;
+}
+.ops-announcement-textarea:focus {
+  outline: none;
+  border-color: #1a2847;
+}
+.ops-announcement-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.ops-announcement-btn {
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+.ops-announcement-btn.schedule {
+  background-color: #ffffff;
+  border: 2px solid #fbbf24;
+  color: #fbbf24;
+}
+.ops-announcement-btn.schedule:hover {
+  background-color: #fffbeb;
+}
+.ops-announcement-btn.post {
+  background-color: #1a2847;
+  color: #ffffff;
+}
+.ops-announcement-btn.post:hover {
+  background-color: #0f1a2e;
+}
+.ops-announcement-table-container {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ops-announcement-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.ops-announcement-table thead {
+  background-color: #f9fafb;
+}
+.ops-announcement-table th {
+  padding: 16px 20px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a2847;
+}
+.ops-announcement-table td {
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+  font-size: 15px;
+  color: #1a2847;
+}
+.ops-announcement-title-cell {
+  color: #6b7280;
+}
+.ops-announcement-status {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.ops-announcement-status.active {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+.ops-announcement-status.scheduled {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+.ops-announcement-status.draft {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+.ops-announcement-table-actions {
+  display: flex;
+  gap: 8px;
+}
+.ops-announcement-action-btn {
+  padding: 6px;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+.ops-announcement-action-btn:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+.ops-announcement-action-btn.delete {
+  color: #ef4444;
+}
+.ops-announcement-action-btn.delete:hover {
+  background-color: #fef2f2;
+  border-color: #ef4444;
+}
+.ops-announcement-action-icon {
+  width: 16px;
+  height: 16px;
+}
+.ops-announcement-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+.ops-announcement-pagination-text {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+.ops-announcement-pagination-buttons {
+  display: flex;
+  gap: 8px;
+}
+.ops-announcement-pagination-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a2847;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.ops-announcement-pagination-btn:hover {
+  background-color: #f9fafb;
+}
+.ops-announcement-pagination-btn.active {
+  background-color: #1a2847;
+  color: #ffffff;
+  border-color: #1a2847;
+}
+.ops-announcement-pagination-icon {
+  width: 16px;
+  height: 16px;
+}
+@media (max-width: 768px) {
+  .ops-announcement-main {
+    margin-left: 0;
+  }
+  .ops-announcement-content {
+    padding: 80px 20px 20px;
+  }
+  .ops-announcement-form-row {
+    grid-template-columns: 1fr;
+  }
+  .ops-announcement-create-section,
+  .ops-announcement-manage-section {
+    padding: 20px;
+  }
+  .ops-announcement-table {
+    font-size: 13px;
+  }
+  .ops-announcement-pagination {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
