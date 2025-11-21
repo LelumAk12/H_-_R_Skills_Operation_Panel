@@ -1,7 +1,7 @@
 .ops-footer {
   background-color: #1a2847;
   color: #ffffff;
-  padding: 1rem;
+  padding: 15px;
   margin-top: auto;
 }
 .ops-footer-content {
@@ -22,8 +22,9 @@
   margin-bottom: 24px;
 }
 .ops-footer-logo {
-  width: 60px;
+  width: 80px;
   height: auto;
+  border-radius: 8px;
 }
 .ops-footer-brand-name {
   font-size: 16px;
@@ -64,7 +65,7 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 13px;
 }
 .ops-footer-links button {
   background: none;
@@ -94,7 +95,7 @@
   text-align: center;
   padding-top: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 16px;
+  font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.7);
 }
 .ops-footer-link {
@@ -103,5 +104,5 @@
   font-weight: 600;
 }
 .ops-footer-link:hover {
-  color: #a6a5a1;
+  color: #a6a49f;
 }

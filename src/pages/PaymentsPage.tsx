@@ -2,68 +2,145 @@ import { useState } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { SearchIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import '../styles/PaymentsPage.css';
+
 export function PaymentsPage() {
   const [activeTab, setActiveTab] = useState<'student' | 'lecture'>('student');
-  const [] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [timeFilter, setTimeFilter] = useState('Last 30 days');
+  const [currentPage, setCurrentPage] = useState(1);
+
   const studentTransactions = [{
     id: '1',
     name: 'Nimal Perera',
     course: 'Diploma in IT',
-    amount: '$134',
+    amount: 'Rs.13000',
     date: 'Nav 25, 2025',
     status: 'Complete'
   }, {
     id: '2',
     name: 'Sachini Fernando',
     course: 'Diploma in Law',
-    amount: '$138',
+    amount: 'Rs.13000',
     date: 'Nav 22, 2025',
     status: 'Complete'
   }, {
     id: '3',
     name: 'Tharindu Jayasooriya',
     course: 'HND in IT',
-    amount: '$1562',
+    amount: 'Rs.15000',
     date: 'Nav 19, 2025',
     status: 'Failed'
+  }, {
+    id: '4',
+    name: 'Malini Silva',
+    course: 'Certificate in Business',
+    amount: 'Rs.24000',
+    date: 'Nav 18, 2025',
+    status: 'Complete'
+  }, {
+    id: '5',
+    name: 'Ravi Kumar',
+    course: 'HND in Engineering',
+    amount: 'Rs.8000',
+    date: 'Nav 17, 2025',
+    status: 'Complete'
+  }, {
+    id: '6',
+    name: 'Anjali Sharma',
+    course: 'Diploma in IT',
+    amount: 'Rs.5000',
+    date: 'Nav 16, 2025',
+    status: 'Failed'
   }];
+
   const lecturerPayments = [{
     id: '1',
     name: 'Dr. Malsha Karunaratne',
     course: 'Biomedical Science',
-    amount: '$134',
+    amount: 'Rs.13400',
     date: 'Nav 25, 2025',
     status: 'Complete'
   }, {
     id: '2',
     name: 'Mr. Dilan Madushanka',
     course: 'Web Development Fundamentals',
-    amount: '$138',
+    amount: 'Rs.13800',
     date: 'Nav 22, 2025',
     status: 'Complete'
   }, {
     id: '3',
     name: 'Ms. Ishara Jayasinghe',
     course: 'HND in IT',
-    amount: '$1562',
+    amount: 'Rs.15000',
     date: 'Nav 19, 2025',
     status: 'Failed'
+  }, {
+    id: '4',
+    name: 'Prof. Sunil Desai',
+    course: 'Advanced Python',
+    amount: 'Rs.4500',
+    date: 'Nav 18, 2025',
+    status: 'Complete'
+  }, {
+    id: '5',
+    name: 'Dr. Lisa Wong',
+    course: 'Data Science Basics',
+    amount: 'Rs.6780',
+    date: 'Nav 17, 2025',
+    status: 'Complete'
+  }, {
+    id: '6',
+    name: 'Mr. Ahmed Hassan',
+    course: 'Mobile App Development',
+    amount: 'Rs.8000',
+    date: 'Nav 16, 2025',
+    status: 'Complete'
   }];
+
+  const itemsPerPage = 5;
+  const currentTransactions = activeTab === 'student' ? studentTransactions : lecturerPayments;
+  
+  const filteredTransactions = currentTransactions.filter(trans =>
+    trans.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trans.course.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage) || 1;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedTransactions = filteredTransactions.slice(startIndex, startIndex + itemsPerPage);
+  const endingIndex = Math.min(startIndex + itemsPerPage, filteredTransactions.length);
+
+  const handlePageChange = (pageNum: number) => {
+    if (pageNum >= 1 && pageNum <= totalPages) {
+      setCurrentPage(pageNum);
+    }
+  };
+
+  const handleTabChange = (tab: 'student' | 'lecture') => {
+    setActiveTab(tab);
+    setCurrentPage(1);
+    setSearchQuery('');
+  };
   return <div className="ops-payments-page">
       <OperationsSidebar />
       <div className="ops-payments-main">
         <OperationsHeader />
         <div className="ops-payments-content">
-
+          <div className="ops-payments-search-wrapper">
+            <SearchIcon className="ops-payments-search-icon" />
+            <input type="text" placeholder="Search by name or course..." value={searchQuery} onChange={e => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }} className="ops-payments-search-input" />
+          </div>
           <h1 className="ops-payments-title">Payments</h1>
           <div className="ops-payments-tabs">
-            <button onClick={() => setActiveTab('student')} className={`ops-payments-tab ${activeTab === 'student' ? 'active' : ''}`}>
+            <button onClick={() => handleTabChange('student')} className={`ops-payments-tab ${activeTab === 'student' ? 'active' : ''}`}>
               Student
             </button>
-            <button onClick={() => setActiveTab('lecture')} className={`ops-payments-tab ${activeTab === 'lecture' ? 'active' : ''}`}>
+            <button onClick={() => handleTabChange('lecture')} className={`ops-payments-tab ${activeTab === 'lecture' ? 'active' : ''}`}>
               Lecture
             </button>
           </div>
@@ -71,14 +148,14 @@ export function PaymentsPage() {
               <div className="ops-payments-stats">
                 <div className="ops-payments-stat-card">
                   <p className="ops-payments-stat-label">Total Revenue</p>
-                  <p className="ops-payments-stat-value">$125,430.00</p>
+                  <p className="ops-payments-stat-value">Rs.125,430.00</p>
                   <p className="ops-payments-stat-change positive">
                     +2.5% vs last month
                   </p>
                 </div>
                 <div className="ops-payments-stat-card">
                   <p className="ops-payments-stat-label">Pending Payments</p>
-                  <p className="ops-payments-stat-value">$8,650.00</p>
+                  <p className="ops-payments-stat-value">Rs.8,650.00</p>
                   <p className="ops-payments-stat-change positive">
                     +1.8% vs last month
                   </p>
@@ -114,7 +191,7 @@ export function PaymentsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {studentTransactions.map(transaction => <tr key={transaction.id}>
+                    {paginatedTransactions.map(transaction => <tr key={transaction.id}>
                         <td className="ops-payments-name-cell">
                           {transaction.name}
                         </td>
@@ -142,18 +219,23 @@ export function PaymentsPage() {
                 </table>
                 <div className="ops-payments-pagination">
                   <p className="ops-payments-pagination-text">
-                    Showing 1 to 5 of 97 results
+                    Showing {filteredTransactions.length > 0 ? startIndex + 1 : 0} to {endingIndex} of {filteredTransactions.length} results
                   </p>
                   <div className="ops-payments-pagination-buttons">
-                    <button className="ops-payments-pagination-btn">
+                    <button className="ops-payments-pagination-btn" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                       <ChevronLeftIcon className="ops-payments-pagination-icon" />
                     </button>
-                    <button className="ops-payments-pagination-btn active">
-                      1
-                    </button>
-                    <button className="ops-payments-pagination-btn">2</button>
-                    <button className="ops-payments-pagination-btn">3</button>
-                    <button className="ops-payments-pagination-btn">
+                    {[1, 2, 3].map(pageNum => (
+                      <button 
+                        key={pageNum}
+                        className={`ops-payments-pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                        onClick={() => handlePageChange(pageNum)}
+                        disabled={pageNum > totalPages}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                    <button className="ops-payments-pagination-btn" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages || totalPages === 0}>
                       <ChevronRightIcon className="ops-payments-pagination-icon" />
                     </button>
                   </div>
@@ -164,23 +246,23 @@ export function PaymentsPage() {
               <div className="ops-payments-stats">
                 <div className="ops-payments-stat-card">
                   <p className="ops-payments-stat-label">Total Payments Made</p>
-                  <p className="ops-payments-stat-value">$125,430.00</p>
+                  <p className="ops-payments-stat-value">Rs.125,430.00</p>
                 </div>
                 <div className="ops-payments-stat-card">
                   <p className="ops-payments-stat-label">Pending Payments</p>
-                  <p className="ops-payments-stat-value">$15,200.00</p>
+                  <p className="ops-payments-stat-value">Rs.15,200.00</p>
                 </div>
                 <div className="ops-payments-stat-card">
                   <p className="ops-payments-stat-label">
                     This Month's Payouts
                   </p>
-                  <p className="ops-payments-stat-value">$22,800.00</p>
+                  <p className="ops-payments-stat-value">Rs.22,800.00</p>
                 </div>
                 <div className="ops-payments-stat-card">
                   <p className="ops-payments-stat-label">
                     Next Scheduled Payout
                   </p>
-                  <p className="ops-payments-stat-value">$54,300</p>
+                  <p className="ops-payments-stat-value">Rs.54,300</p>
                 </div>
               </div>
               <div className="ops-payments-filter-wrapper">
@@ -203,7 +285,7 @@ export function PaymentsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {lecturerPayments.map(payment => <tr key={payment.id}>
+                    {paginatedTransactions.map(payment => <tr key={payment.id}>
                         <td className="ops-payments-name-cell">
                           {payment.name}
                         </td>
@@ -226,18 +308,23 @@ export function PaymentsPage() {
                 </table>
                 <div className="ops-payments-pagination">
                   <p className="ops-payments-pagination-text">
-                    Showing 1 to 5 of 97 results
+                    Showing {filteredTransactions.length > 0 ? startIndex + 1 : 0} to {endingIndex} of {filteredTransactions.length} results
                   </p>
                   <div className="ops-payments-pagination-buttons">
-                    <button className="ops-payments-pagination-btn">
+                    <button className="ops-payments-pagination-btn" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
                       <ChevronLeftIcon className="ops-payments-pagination-icon" />
                     </button>
-                    <button className="ops-payments-pagination-btn active">
-                      1
-                    </button>
-                    <button className="ops-payments-pagination-btn">2</button>
-                    <button className="ops-payments-pagination-btn">3</button>
-                    <button className="ops-payments-pagination-btn">
+                    {[1, 2, 3].map(pageNum => (
+                      <button 
+                        key={pageNum}
+                        className={`ops-payments-pagination-btn ${currentPage === pageNum ? 'active' : ''}`}
+                        onClick={() => handlePageChange(pageNum)}
+                        disabled={pageNum > totalPages}
+                      >
+                        {pageNum}
+                      </button>
+                    ))}
+                    <button className="ops-payments-pagination-btn" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages || totalPages === 0}>
                       <ChevronRightIcon className="ops-payments-pagination-icon" />
                     </button>
                   </div>

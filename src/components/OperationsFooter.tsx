@@ -1,3 +1,4 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FacebookIcon, InstagramIcon, MessageCircleIcon, YoutubeIcon } from 'lucide-react';
 import '../styles/OperationsFooter.css';
@@ -8,8 +9,6 @@ export function OperationsFooter() {
         <div className="ops-footer-section">
           <div className="ops-footer-logo-wrapper">
             <img src="/Footer-Logo.jpg" alt="H & R Skills" className="ops-footer-logo" />
-            <div>
-            </div>
           </div>
           <div className="ops-footer-social">
             <button className="ops-footer-social-btn">

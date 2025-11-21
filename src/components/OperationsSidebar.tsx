@@ -1,9 +1,11 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { LayoutDashboardIcon, UsersIcon, BookOpenIcon, CreditCardIcon, MegaphoneIcon, SettingsIcon, LogOutIcon, BellIcon } from 'lucide-react';
+import { useOperations } from '../context/OperationsContext';
 import '../styles/OperationsSidebar.css';
 export function OperationsSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { platformSettings } = useOperations();
   const menuItems = [{
     icon: LayoutDashboardIcon,
     label: 'Overview',
@@ -36,7 +38,7 @@ export function OperationsSidebar() {
   const isActive = (path: string) => location.pathname === path;
   return <div className="ops-sidebar">
       <div className="ops-sidebar-header">
-        <img src="/Logo.png" alt="H & R Skills" className="ops-sidebar-logo" />
+        <img src={platformSettings.logoUrl} alt={platformSettings.platformName} className="ops-sidebar-logo" />
         <div className="ops-sidebar-brand">
           <h2 className="ops-sidebar-title">Admin Dashboard</h2>
           <p className="ops-sidebar-subtitle">admin@gmail.com</p>

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import '../styles/DashboardPage.css';
-const registrationData = [{
+const fullRegistrationData = [{
   month: 'Jan',
   value: 45
 }, {
@@ -41,9 +41,55 @@ const registrationData = [{
   month: 'Dec',
   value: 82
 }];
+
+// Completion percentage data by time filter
+const completionDataByFilter = {
+  'Day': 88,
+  'Last 7 days': 82,
+  'Last 30 days': 75,
+  'Last year': 71
+};
+
+// Registration data by time filter
+const registrationDataByFilter = {
+  'Day': [
+    { period: '12AM', value: 12 },
+    { period: '3AM', value: 18 },
+    { period: '6AM', value: 25 },
+    { period: '9AM', value: 45 },
+    { period: '12PM', value: 65 },
+    { period: '3PM', value: 72 },
+    { period: '6PM', value: 68 },
+    { period: '9PM', value: 55 }
+  ],
+  'Last 7 days': [
+    { period: 'Mon', value: 42 },
+    { period: 'Tue', value: 48 },
+    { period: 'Wed', value: 55 },
+    { period: 'Thu', value: 62 },
+    { period: 'Fri', value: 71 },
+    { period: 'Sat', value: 58 },
+    { period: 'Sun', value: 52 }
+  ],
+  'Last 30 days': fullRegistrationData,
+  'Last year': [
+    { period: 'Q1', value: 48 },
+    { period: 'Q2', value: 61 },
+    { period: 'Q3', value: 76 },
+    { period: 'Q4', value: 73 }
+  ]
+};
+
 export function DashboardPage() {
   const [timeFilter, setTimeFilter] = useState('Last 30 days');
-  const completedPercentage = 75;
+  
+  const registrationData = useMemo(() => {
+    return registrationDataByFilter[timeFilter as keyof typeof registrationDataByFilter] || fullRegistrationData;
+  }, [timeFilter]);
+  
+  const completedPercentage = useMemo(() => {
+    return completionDataByFilter[timeFilter as keyof typeof completionDataByFilter] || 75;
+  }, [timeFilter]);
   return <div className="ops-dashboard-page">
       <OperationsSidebar />
       <div className="ops-dashboard-main">
@@ -76,7 +122,7 @@ export function DashboardPage() {
             </div>
             <div className="ops-stat-card">
               <p className="ops-stat-label">Total Earnings</p>
-              <p className="ops-stat-value">$54,300</p>
+              <p className="ops-stat-value">RS.54,300</p>
               <p className="ops-stat-change positive">+12.5%</p>
             </div>
           </div>
@@ -92,7 +138,7 @@ export function DashboardPage() {
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={registrationData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="month" stroke="#9ca3af" />
+                  <XAxis dataKey={timeFilter === 'Day' ? 'period' : timeFilter === 'Last year' ? 'period' : 'month'} stroke="#9ca3af" />
                   <YAxis stroke="#9ca3af" />
                   <Tooltip />
                   <Line type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} fill="url(#colorGradient)" dot={false} />

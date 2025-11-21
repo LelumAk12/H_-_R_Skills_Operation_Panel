@@ -21,7 +21,7 @@
   gap: 16px;
 }
 .ops-sidebar-logo {
-  width: 5rem;
+  width: 60px;
   height: auto;
   transition: transform 0.3s ease;
 }
@@ -32,7 +32,7 @@
   flex: 1;
 }
 .ops-sidebar-title {
-  font-size: 1.15rem;
+  font-size: 16px;
   font-weight: 700;
   color: #1a2847;
   margin: 0 0 2px 0;
@@ -60,7 +60,7 @@
   border-radius: 8px;
   color: #4b5563;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: left;
@@ -87,7 +87,7 @@
   transform: scale(1.1);
 }
 .ops-sidebar-nav-item.active {
-  background-color: #ffffff;
+  background-color: #b1b0ad;
   color: #1a2847;
 }
 .ops-sidebar-nav-item.active::before {

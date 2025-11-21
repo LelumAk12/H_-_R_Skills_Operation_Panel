@@ -1,5 +1,5 @@
 .ops-header {
-  height: 75px;
+  height: 64px;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e7eb;
   display: flex;
@@ -18,7 +18,7 @@
   align-items: center;
 }
 .ops-header-logo-image {
-  height: 5rem;
+  height: 40px;
   width: auto;
 }
 .ops-header-search-wrapper {

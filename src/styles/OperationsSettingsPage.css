@@ -15,6 +15,9 @@
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 .ops-settings-title {
   font-size: 32px;
@@ -53,18 +56,39 @@
   font-weight: 600;
   color: #1a2847;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
+.ops-settings-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #1a2847;
+}
+
 .ops-settings-input {
   padding: 12px 16px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-size: 15px;
   color: #1a2847;
+  font-family: inherit;
+  background-color: #ffffff;
 }
 .ops-settings-input:focus {
   outline: none;
   border-color: #1a2847;
+  box-shadow: 0 0 0 3px rgba(26, 40, 71, 0.1);
 }
+
+.ops-settings-input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .ops-settings-logo-group {
   display: flex;
   flex-direction: column;
@@ -96,6 +120,16 @@
 .ops-settings-upload-btn:hover {
   background-color: #0f1a2e;
 }
+
+.ops-settings-backup-info {
+  padding: 12px 16px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #4b5563;
+  margin: 0;
+}
+
 .ops-settings-actions {
   display: flex;
   justify-content: flex-end;
@@ -109,13 +143,14 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  border: 2px solid transparent;
 }
 .ops-settings-btn.cancel {
   background-color: #ffffff;
   border: 2px solid #fbbf24;
   color: #fbbf24;
 }
-.ops-settings-btn.cancel:hover {
+.ops-settings-btn.cancel:hover:not(:disabled) {
   background-color: #fffbeb;
 }
 .ops-settings-btn.save {
@@ -123,9 +158,48 @@
   border: 2px solid #1a2847;
   color: #ffffff;
 }
-.ops-settings-btn.save:hover {
+.ops-settings-btn.save:hover:not(:disabled) {
   background-color: #0f1a2e;
 }
+.ops-settings-btn.backup {
+  background-color: #10b981;
+  border: 2px solid #10b981;
+  color: #ffffff;
+}
+.ops-settings-btn.backup:hover {
+  background-color: #059669;
+}
+
+.ops-settings-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ops-settings-success-message {
+  background-color: #d1fae5;
+  border: 1px solid #6ee7b7;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #047857;
+  font-weight: 600;
+  margin-bottom: 24px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .ops-settings-main {
     margin-left: 0;

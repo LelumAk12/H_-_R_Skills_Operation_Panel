@@ -16,6 +16,32 @@
   width: 100%;
   margin: 0 auto;
 }
+.ops-payments-search-wrapper {
+  position: relative;
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+.ops-payments-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+}
+.ops-payments-search-input {
+  width: 100%;
+  padding: 12px 16px 12px 48px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #1a2847;
+}
+.ops-payments-search-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
 .ops-payments-title {
   font-size: 36px;
   font-weight: 700;

@@ -1,5 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import { OperationsProvider } from './context/OperationsContext';
+import { ScrollToTop } from './components/ScrollToTop';
+// Operations Routes
 import { LoginPage as OperationsLoginPage } from './pages/LoginPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { UserManagementPage } from './pages/UserManagementPage';
@@ -13,8 +16,11 @@ import { OperationsNotificationsPage } from './pages/OperationsNotificationsPage
 import { EditUserPage } from './pages/EditUserPage';
 export function App() {
   return <BrowserRouter>
+      <ScrollToTop />
+      <Toaster position="top-right" richColors />
       <Routes>
         <Route path="/" element={<Navigate to="/operations/login" replace />} />
+
         {/* Operations Routes */}
         <Route path="/operations/login" element={<OperationsProvider>
               <OperationsLoginPage />

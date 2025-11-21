@@ -1,11 +1,16 @@
-import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { GraduationCapIcon } from 'lucide-react';
 import '../styles/LecturerDetailPage.css';
 export function LecturerDetailPage() {
-  const navigate = useNavigate();
+  const {
+    id
+  } = useParams<{
+    id: string;
+  }>();
+  void id;
   const lecturer = {
     id: '1',
     name: 'Dr. Malsha Karunaratne',
@@ -40,7 +45,7 @@ export function LecturerDetailPage() {
         <OperationsHeader />
         <div className="ops-lecturer-detail-content">
           <div className="ops-lecturer-profile-card">
-            <img src="Lprofile.jpg" alt={lecturer.name} className="ops-lecturer-profile-photo" />
+            <img src="/Lprofile.jpg" alt={lecturer.name} className="ops-lecturer-profile-photo" />
             <div className="ops-lecturer-profile-info">
               <h2 className="ops-lecturer-profile-name">{lecturer.name}</h2>
               <p className="ops-lecturer-profile-title">{lecturer.title}</p>

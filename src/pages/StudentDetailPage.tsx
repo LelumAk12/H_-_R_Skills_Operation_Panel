@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
@@ -10,7 +10,6 @@ export function StudentDetailPage() {
   } = useParams<{
     id: string;
   }>();
-  const navigate = useNavigate();
   const {
     getStudentById
   } = useOperations();
@@ -33,7 +32,7 @@ export function StudentDetailPage() {
         <OperationsHeader />
         <div className="ops-student-detail-content">
           <div className="ops-student-profile-card">
-            <img src="Profile.jpg" alt={student.name} className="ops-student-profile-photo" />
+            <img src="/Profile.jpg" alt={student.name} className="ops-student-profile-photo" />
             <div className="ops-student-profile-info">
               <h2 className="ops-student-profile-name">{student.name}</h2>
               <p className="ops-student-profile-id">

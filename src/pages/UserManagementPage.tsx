@@ -4,27 +4,56 @@ import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { useOperations } from '../context/OperationsContext';
-import { EyeIcon, Trash2Icon, Edit2Icon } from 'lucide-react';
+import { EyeIcon, Trash2Icon, Edit2Icon, XIcon } from 'lucide-react';
+import { toast } from 'sonner';
 import '../styles/UserManagementPage.css';
 export function UserManagementPage() {
   const navigate = useNavigate();
   const {
     students,
-    lecturers
+    lecturers,
+    deleteStudent,
+    deleteLecturer
   } = useOperations();
   const [activeTab, setActiveTab] = useState<'students' | 'lecturers'>('students');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [deleteConfirm, setDeleteConfirm] = useState<{
+    id: string;
+    name: string;
+    type: 'student' | 'lecturer';
+  } | null>(null);
+  
+  const filteredStudents = students.filter(student => student.name.toLowerCase().includes(searchQuery.toLowerCase()) || student.email.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredLecturers = lecturers.filter(lecturer => lecturer.name.toLowerCase().includes(searchQuery.toLowerCase()) || lecturer.email.toLowerCase().includes(searchQuery.toLowerCase()));
+  
+  const handleDelete = () => {
+    if (!deleteConfirm) return;
+    if (deleteConfirm.type === 'student') {
+      deleteStudent(deleteConfirm.id);
+      toast.success('Student deleted successfully');
+    } else {
+      deleteLecturer(deleteConfirm.id);
+      toast.success('Lecturer deleted successfully');
+    }
+    setDeleteConfirm(null);
+  };
   return <div className="ops-user-management-page">
       <OperationsSidebar />
       <div className="ops-user-management-main">
         <OperationsHeader />
         <div className="ops-user-management-content">
-          <h1 className="ops-user-management-title">User Management</h1>
+          <div className="ops-user-management-header">
+            <h1 className="ops-user-management-title">User Management</h1>
+          </div>
+          <div className="ops-user-search-wrapper">
+            <input type="text" placeholder="Search by name or email..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="ops-user-search-input" />
+          </div>
           <div className="ops-user-management-tabs">
             <button onClick={() => setActiveTab('students')} className={`ops-tab ${activeTab === 'students' ? 'active' : ''}`}>
-              Students
+              Students ({students.length})
             </button>
             <button onClick={() => setActiveTab('lecturers')} className={`ops-tab ${activeTab === 'lecturers' ? 'active' : ''}`}>
-              Lecturers
+              Lecturers ({lecturers.length})
             </button>
           </div>
           {activeTab === 'students' && <div className="ops-table-container">
@@ -39,7 +68,7 @@ export function UserManagementPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {students.map(student => <tr key={student.id}>
+                  {filteredStudents.map(student => <tr key={student.id}>
                       <td className="ops-table-name">{student.name}</td>
                       <td>{student.email}</td>
                       <td>{student.registeredDate}</td>
@@ -50,13 +79,17 @@ export function UserManagementPage() {
                       </td>
                       <td>
                         <div className="ops-table-actions">
-                          <button onClick={() => navigate(`/operations/student/${student.id}`)} className="ops-action-button view">
+                          <button onClick={() => navigate(`/operations/student/${student.id}`)} className="ops-action-button view" title="View Details">
                             <EyeIcon className="ops-action-icon" />
                           </button>
-                          <button onClick={() => navigate(`/operations/edit-user/${student.id}`)} className="ops-action-button edit">
+                          <button onClick={() => navigate(`/operations/edit-user/${student.id}`)} className="ops-action-button edit" title="Edit User">
                             <Edit2Icon className="ops-action-icon" />
                           </button>
-                          <button className="ops-action-button delete">
+                          <button onClick={() => setDeleteConfirm({
+                      id: student.id,
+                      name: student.name,
+                      type: 'student'
+                    })} className="ops-action-button delete" title="Delete User">
                             <Trash2Icon className="ops-action-icon" />
                           </button>
                         </div>
@@ -78,7 +111,7 @@ export function UserManagementPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {lecturers.map(lecturer => <tr key={lecturer.id}>
+                  {filteredLecturers.map(lecturer => <tr key={lecturer.id}>
                       <td className="ops-table-name">{lecturer.name}</td>
                       <td>{lecturer.email}</td>
                       <td>{lecturer.registeredDate}</td>
@@ -90,13 +123,17 @@ export function UserManagementPage() {
                       </td>
                       <td>
                         <div className="ops-table-actions">
-                          <button onClick={() => navigate(`/operations/lecturer/${lecturer.id}`)} className="ops-action-button view">
+                          <button onClick={() => navigate(`/operations/lecturer/${lecturer.id}`)} className="ops-action-button view" title="View Details">
                             <EyeIcon className="ops-action-icon" />
                           </button>
-                          <button onClick={() => navigate(`/operations/edit-user/${lecturer.id}`)} className="ops-action-button edit">
+                          <button onClick={() => navigate(`/operations/edit-user/${lecturer.id}`)} className="ops-action-button edit" title="Edit User">
                             <Edit2Icon className="ops-action-icon" />
                           </button>
-                          <button className="ops-action-button delete">
+                          <button onClick={() => setDeleteConfirm({
+                      id: lecturer.id,
+                      name: lecturer.name,
+                      type: 'lecturer'
+                    })} className="ops-action-button delete" title="Delete User">
                             <Trash2Icon className="ops-action-icon" />
                           </button>
                         </div>
@@ -108,5 +145,32 @@ export function UserManagementPage() {
         </div>
         <OperationsFooter />
       </div>
+      
+      {/* Delete Confirmation Modal */}
+      {deleteConfirm && <div className="ops-modal-overlay" onClick={() => setDeleteConfirm(null)}>
+          <div className="ops-modal ops-modal-small" onClick={e => e.stopPropagation()}>
+            <div className="ops-modal-header">
+              <h2 className="ops-modal-title">Confirm Delete</h2>
+              <button onClick={() => setDeleteConfirm(null)} className="ops-modal-close">
+                <XIcon className="ops-modal-close-icon" />
+              </button>
+            </div>
+            <div className="ops-modal-body">
+              <p className="ops-modal-text">
+                Are you sure you want to delete{' '}
+                <strong>{deleteConfirm.name}</strong>? This action cannot be
+                undone.
+              </p>
+            </div>
+            <div className="ops-modal-footer">
+              <button onClick={() => setDeleteConfirm(null)} className="ops-modal-btn cancel">
+                Cancel
+              </button>
+              <button onClick={handleDelete} className="ops-modal-btn delete">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>}
     </div>;
 }

@@ -26,9 +26,9 @@
   background-color: #ffffff;
 }
 .ops-login-logo {
-  width: 100%;
-  max-width: 20rem;
+  width: 320px;
   height: auto;
+  margin-bottom: 40px;
 }
 .ops-login-title {
   font-size: 48px;

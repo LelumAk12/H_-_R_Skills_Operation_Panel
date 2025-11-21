@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
+import { SearchIcon } from 'lucide-react';
 import '../styles/CourseManagementPage.css';
 export function CourseManagementPage() {
-  const [] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const courses = [{
     id: '1',
     title: 'Biomedical Science',
@@ -29,6 +30,10 @@ export function CourseManagementPage() {
       <div className="ops-course-management-main">
         <OperationsHeader />
         <div className="ops-course-management-content">
+          <div className="ops-course-search-wrapper">
+            <SearchIcon className="ops-course-search-icon" />
+            <input type="text" placeholder="Search by course title or lecturer..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="ops-course-search-input" />
+          </div>
           <h1 className="ops-course-management-title">Course Management</h1>
           <div className="ops-course-table-container">
             <table className="ops-course-table">
