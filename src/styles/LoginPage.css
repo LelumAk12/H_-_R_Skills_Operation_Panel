@@ -127,3 +127,46 @@
 .ops-login-button:hover {
   background-color: #0f1a2e;
 }
+
+.ops-login-back-button {
+  position: fixed;
+  top: 32px;
+  left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.ops-login-back-button:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: translateX(-4px);
+}
+
+.ops-login-back-button:active {
+  transform: translateX(-2px);
+}
+
+.ops-login-back-icon {
+  width: 18px;
+  height: 18px;
+  color: #1a2847;
+  transition: transform 0.3s ease;
+}
+
+.ops-login-back-button:hover .ops-login-back-icon {
+  transform: translateX(-2px);
+}
