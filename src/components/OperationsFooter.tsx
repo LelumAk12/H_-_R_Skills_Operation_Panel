@@ -1,14 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FacebookIcon, InstagramIcon, MessageCircleIcon, YoutubeIcon } from 'lucide-react';
+import { useOperations } from '../context/OperationsContext';
 import '../styles/OperationsFooter.css';
 export function OperationsFooter() {
   const navigate = useNavigate();
+  const { platformSettings } = useOperations();
   return <footer className="ops-footer">
       <div className="ops-footer-content">
         <div className="ops-footer-section">
           <div className="ops-footer-logo-wrapper">
-            <img src="/Footer-Logo.jpg" alt="H & R Skills" className="ops-footer-logo" />
+            <img src={platformSettings.logoUrl || '/Footer-Logo.jpg'} alt={platformSettings.platformName || 'H & R Skills'} className="ops-footer-logo" />
           </div>
           <div className="ops-footer-social">
             <button className="ops-footer-social-btn">
@@ -90,13 +92,17 @@ export function OperationsFooter() {
             <p>
               <strong>Email:</strong>
             </p>
-            <p>*****@gmail.com</p>
+            <p>{platformSettings.contactEmail || '*****@gmail.com'}</p>
+            <p style={{ marginTop: 8 }}>
+              <strong>Support:</strong>
+            </p>
+            <p><a href={platformSettings.supportUrl || '#'} className="ops-footer-link">{platformSettings.supportUrl || 'Support Portal'}</a></p>
           </div>
         </div>
       </div>
       <div className="ops-footer-bottom">
         <p>
-          2025 © All Rights Reserved | H & R Skills Pvt Ltd | Designed &
+          {new Date().getFullYear()} © All Rights Reserved | {platformSettings.platformName || 'H & R Skills Pvt Ltd'} | Designed &
           Developed by{' '}
           <a href="https://everefficient.lk/" target="_blank" rel="noopener noreferrer" className="ops-footer-link">
             EVER EFFICIENT Business Management (Pvt) Ltd.

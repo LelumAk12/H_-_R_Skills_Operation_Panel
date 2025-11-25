@@ -40,8 +40,8 @@ export function OperationsSidebar() {
       <div className="ops-sidebar-header">
         <img src={platformSettings.logoUrl} alt={platformSettings.platformName} className="ops-sidebar-logo" />
         <div className="ops-sidebar-brand">
-          <h2 className="ops-sidebar-title">Admin Dashboard</h2>
-          <p className="ops-sidebar-subtitle">admin@gmail.com</p>
+          <h2 className="ops-sidebar-title">{platformSettings.platformName || 'Admin Dashboard'}</h2>
+          <p className="ops-sidebar-subtitle">{platformSettings.contactEmail || 'admin@gmail.com'}</p>
         </div>
       </div>
       <nav className="ops-sidebar-nav">
