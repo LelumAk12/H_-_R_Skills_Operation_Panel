@@ -10,7 +10,7 @@
 }
 .ops-announcement-content {
   flex: 1;
-  padding: 96px 48px 48px;
+  padding: 35px 48px 48px;
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
@@ -452,4 +452,120 @@
     flex-direction: column;
     gap: 16px;
   }
+}
+
+/* Calendar Picker Styles */
+.ops-announcement-date-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.ops-announcement-date-input-wrapper .ops-announcement-input,
+.ops-announcement-date-input-wrapper .ops-announcement-modal-input {
+  flex: 1;
+  padding-right: 40px;
+}
+
+.ops-announcement-calendar-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b7280;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.ops-announcement-calendar-btn:hover {
+  color: #1a2847;
+}
+
+.ops-announcement-calendar-container {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  z-index: 1001;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.ops-announcement-calendar-picker {
+  padding: 12px;
+  min-width: 300px;
+}
+
+.ops-announcement-calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.ops-announcement-calendar-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2847;
+}
+
+.ops-announcement-calendar-nav {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #1a2847;
+  transition: color 0.2s;
+  padding: 4px 8px;
+}
+
+.ops-announcement-calendar-nav:hover {
+  color: #3b82f6;
+}
+
+.ops-announcement-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.ops-announcement-calendar-day-header {
+  text-align: center;
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 12px;
+  padding: 8px 0;
+}
+
+.ops-announcement-calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #1a2847;
+}
+
+.ops-announcement-calendar-day.empty {
+  cursor: default;
+}
+
+.ops-announcement-calendar-day.active {
+  background-color: #f3f4f6;
+}
+
+.ops-announcement-calendar-day.active:hover {
+  background-color: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
 }

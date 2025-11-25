@@ -1,10 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
-import { SearchIcon, EyeIcon, Edit2Icon, Trash2Icon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { SearchIcon, EyeIcon, Edit2Icon, Trash2Icon, ChevronLeftIcon, ChevronRightIcon, Calendar } from 'lucide-react';
 import { useOperations } from '../context/OperationsContext';
 import '../styles/AnnouncementPage.css';
+
+// Simple Calendar Picker Component
+function CalendarPicker({ value, onChange, onClose }: { value: string; onChange: (date: string) => void; onClose: () => void }) {
+  const [displayMonth, setDisplayMonth] = useState(() => {
+    if (value) {
+      const [month, , year] = value.split('/');
+      return new Date(parseInt(year), parseInt(month) - 1);
+    }
+    return new Date();
+  });
+
+  const getDaysInMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+  };
+
+  const handleDateClick = (day: number) => {
+    const month = String(displayMonth.getMonth() + 1).padStart(2, '0');
+    const year = displayMonth.getFullYear();
+    const dayStr = String(day).padStart(2, '0');
+    onChange(`${month}/${dayStr}/${year}`);
+    onClose();
+  };
+
+  const handlePrevMonth = () => {
+    setDisplayMonth(new Date(displayMonth.getFullYear(), displayMonth.getMonth() - 1));
+  };
+
+  const handleNextMonth = () => {
+    setDisplayMonth(new Date(displayMonth.getFullYear(), displayMonth.getMonth() + 1));
+  };
+
+  const daysInMonth = getDaysInMonth(displayMonth);
+  const firstDay = getFirstDayOfMonth(displayMonth);
+  const days = [];
+  for (let i = 0; i < firstDay; i++) {
+    days.push(null);
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(i);
+  }
+
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  return (
+    <div className="ops-announcement-calendar-picker">
+      <div className="ops-announcement-calendar-header">
+        <button onClick={handlePrevMonth} className="ops-announcement-calendar-nav">‹</button>
+        <h3>{monthNames[displayMonth.getMonth()]} {displayMonth.getFullYear()}</h3>
+        <button onClick={handleNextMonth} className="ops-announcement-calendar-nav">›</button>
+      </div>
+      <div className="ops-announcement-calendar-grid">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div key={day} className="ops-announcement-calendar-day-header">{day}</div>
+        ))}
+        {days.map((day, idx) => (
+          <div
+            key={idx}
+            className={`ops-announcement-calendar-day ${day ? 'active' : 'empty'}`}
+            onClick={() => day && handleDateClick(day)}
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function AnnouncementPage() {
   const { announcements, addAnnouncement, deleteAnnouncement, updateAnnouncement } = useOperations();
@@ -24,6 +95,25 @@ export function AnnouncementPage() {
     description: '',
     scheduleDate: ''
   });
+  const [showCreateCalendar, setShowCreateCalendar] = useState(false);
+  const [showEditCalendar, setShowEditCalendar] = useState(false);
+  const createCalendarRef = useRef<HTMLDivElement>(null);
+  const editCalendarRef = useRef<HTMLDivElement>(null);
+
+  // Close calendar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (createCalendarRef.current && !createCalendarRef.current.contains(event.target as Node)) {
+        setShowCreateCalendar(false);
+      }
+      if (editCalendarRef.current && !editCalendarRef.current.contains(event.target as Node)) {
+        setShowEditCalendar(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const itemsPerPage = 5;
   const filteredAnnouncements = announcements.filter((announcement: any) =>
@@ -145,9 +235,11 @@ export function AnnouncementPage() {
         title: editFormData.title,
         audience: editFormData.audience,
         description: editFormData.description,
-        scheduleDate: editFormData.scheduleDate || undefined
+        scheduleDate: editFormData.scheduleDate || undefined,
+        date: editFormData.scheduleDate || editModal.date
       });
       setEditModal(null);
+      setShowEditCalendar(false);
     }
   };
 
@@ -198,7 +290,39 @@ export function AnnouncementPage() {
                   <label className="ops-announcement-label">
                     Schedule Publication (Optional)
                   </label>
-                  <input type="text" name="scheduleDate" placeholder="mm/dd/yyyy" maxLength={10} value={formData.scheduleDate} onChange={handleDateChange} className="ops-announcement-input" />
+                  <div className="ops-announcement-date-input-wrapper" ref={createCalendarRef}>
+                    <input 
+                      type="text" 
+                      name="scheduleDate" 
+                      placeholder="mm/dd/yyyy" 
+                      maxLength={10} 
+                      value={formData.scheduleDate} 
+                      onChange={handleDateChange} 
+                      className="ops-announcement-input" 
+                      readOnly 
+                      onClick={() => setShowCreateCalendar(true)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                    <button 
+                      className="ops-announcement-calendar-btn" 
+                      onClick={() => setShowCreateCalendar(!showCreateCalendar)}
+                      type="button"
+                    >
+                      <Calendar size={18} />
+                    </button>
+                    {showCreateCalendar && (
+                      <div className="ops-announcement-calendar-container">
+                        <CalendarPicker 
+                          value={formData.scheduleDate} 
+                          onChange={(date) => {
+                            setFormData({ ...formData, scheduleDate: date });
+                            setShowCreateCalendar(false);
+                          }}
+                          onClose={() => setShowCreateCalendar(false)}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="ops-announcement-actions">
@@ -372,15 +496,39 @@ export function AnnouncementPage() {
               </div>
               <div className="ops-announcement-modal-field">
                 <label>Schedule Date (Optional)</label>
-                <input 
-                  type="text" 
-                  name="scheduleDate" 
-                  placeholder="mm/dd/yyyy"
-                  maxLength={10}
-                  value={editFormData.scheduleDate} 
-                  onChange={handleEditDateChange}
-                  className="ops-announcement-modal-input"
-                />
+                <div className="ops-announcement-date-input-wrapper" ref={editCalendarRef}>
+                  <input 
+                    type="text" 
+                    name="scheduleDate" 
+                    placeholder="mm/dd/yyyy"
+                    maxLength={10}
+                    value={editFormData.scheduleDate} 
+                    onChange={handleEditDateChange}
+                    className="ops-announcement-modal-input"
+                    readOnly
+                    onClick={() => setShowEditCalendar(true)}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <button 
+                    className="ops-announcement-calendar-btn" 
+                    onClick={() => setShowEditCalendar(!showEditCalendar)}
+                    type="button"
+                  >
+                    <Calendar size={18} />
+                  </button>
+                  {showEditCalendar && (
+                    <div className="ops-announcement-calendar-container">
+                      <CalendarPicker 
+                        value={editFormData.scheduleDate} 
+                        onChange={(date) => {
+                          setEditFormData({ ...editFormData, scheduleDate: date });
+                          setShowEditCalendar(false);
+                        }}
+                        onClose={() => setShowEditCalendar(false)}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="ops-announcement-modal-footer">

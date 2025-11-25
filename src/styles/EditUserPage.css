@@ -10,7 +10,7 @@
 }
 .ops-edit-user-content {
   flex: 1;
-  padding: 96px 48px 48px;
+  padding: 35px 48px 48px;
   max-width: 1000px;
   width: 100%;
   margin: 0 auto;
@@ -134,6 +134,10 @@
   background-color: #fef2f2;
   border-color: #fecaca;
 }
+.ops-edit-user-account-item.success {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
 .ops-edit-user-account-title {
   font-size: 16px;
   font-weight: 600;
@@ -142,6 +146,9 @@
 }
 .ops-edit-user-account-title.danger {
   color: #dc2626;
+}
+.ops-edit-user-account-title.success {
+  color: #16a34a;
 }
 .ops-edit-user-account-description {
   font-size: 14px;
@@ -171,6 +178,13 @@
 }
 .ops-edit-user-account-btn.deactivate:hover {
   background-color: #b91c1c;
+}
+.ops-edit-user-account-btn.activate {
+  background-color: #16a34a;
+  color: #ffffff;
+}
+.ops-edit-user-account-btn.activate:hover {
+  background-color: #15803d;
 }
 .ops-edit-user-actions {
   display: flex;

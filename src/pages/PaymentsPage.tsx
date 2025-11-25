@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
@@ -11,101 +11,155 @@ export function PaymentsPage() {
   const [timeFilter, setTimeFilter] = useState('Last 30 days');
   const [currentPage, setCurrentPage] = useState(1);
 
-  const studentTransactions = [{
+  const [studentTransactions, setStudentTransactions] = useState([{
     id: '1',
     name: 'Nimal Perera',
     course: 'Diploma in IT',
     amount: 'Rs.13000',
-    date: 'Nav 25, 2025',
+    date: 'Nov 25, 2025',
+    isoDate: '2025-11-25',
     status: 'Complete'
   }, {
     id: '2',
     name: 'Sachini Fernando',
     course: 'Diploma in Law',
     amount: 'Rs.13000',
-    date: 'Nav 22, 2025',
+    date: 'Nov 22, 2025',
+    isoDate: '2025-11-22',
     status: 'Complete'
   }, {
     id: '3',
     name: 'Tharindu Jayasooriya',
     course: 'HND in IT',
     amount: 'Rs.15000',
-    date: 'Nav 19, 2025',
+    date: 'Nov 19, 2025',
+    isoDate: '2025-11-19',
     status: 'Failed'
   }, {
     id: '4',
     name: 'Malini Silva',
     course: 'Certificate in Business',
     amount: 'Rs.24000',
-    date: 'Nav 18, 2025',
+    date: 'Oct 18, 2025',
+    isoDate: '2025-10-18',
     status: 'Complete'
   }, {
     id: '5',
     name: 'Ravi Kumar',
     course: 'HND in Engineering',
     amount: 'Rs.8000',
-    date: 'Nav 17, 2025',
+    date: 'Nov 17, 2024',
+    isoDate: '2024-11-17',
     status: 'Complete'
   }, {
     id: '6',
     name: 'Anjali Sharma',
     course: 'Diploma in IT',
     amount: 'Rs.5000',
-    date: 'Nav 16, 2025',
+    date: 'Nov 16, 2025',
+    isoDate: '2025-11-16',
     status: 'Failed'
-  }];
+  }]);
 
-  const lecturerPayments = [{
+  const [lecturerPayments, setLecturerPayments] = useState([{
     id: '1',
     name: 'Dr. Malsha Karunaratne',
     course: 'Biomedical Science',
     amount: 'Rs.13400',
-    date: 'Nav 25, 2025',
+    date: 'Nov 25, 2025',
+    isoDate: '2025-11-25',
     status: 'Complete'
   }, {
     id: '2',
     name: 'Mr. Dilan Madushanka',
     course: 'Web Development Fundamentals',
     amount: 'Rs.13800',
-    date: 'Nav 22, 2025',
+    date: 'Nov 20, 2025',
+    isoDate: '2025-11-20',
     status: 'Complete'
   }, {
     id: '3',
     name: 'Ms. Ishara Jayasinghe',
     course: 'HND in IT',
     amount: 'Rs.15000',
-    date: 'Nav 19, 2025',
+    date: 'Sep 19, 2025',
+    isoDate: '2025-09-19',
     status: 'Failed'
   }, {
     id: '4',
     name: 'Prof. Sunil Desai',
     course: 'Advanced Python',
     amount: 'Rs.4500',
-    date: 'Nav 18, 2025',
+    date: 'Oct 18, 2025',
+    isoDate: '2025-10-18',
     status: 'Complete'
   }, {
     id: '5',
     name: 'Dr. Lisa Wong',
     course: 'Data Science Basics',
     amount: 'Rs.6780',
-    date: 'Nav 17, 2025',
+    date: 'Nov 01, 2024',
+    isoDate: '2024-11-01',
     status: 'Complete'
   }, {
     id: '6',
     name: 'Mr. Ahmed Hassan',
     course: 'Mobile App Development',
     amount: 'Rs.8000',
-    date: 'Nav 16, 2025',
+    date: 'Nov 16, 2025',
+    isoDate: '2025-11-16',
     status: 'Complete'
-  }];
+  }]);
 
   const itemsPerPage = 5;
   const currentTransactions = activeTab === 'student' ? studentTransactions : lecturerPayments;
-  
-  const filteredTransactions = currentTransactions.filter(trans =>
-    trans.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    trans.course.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const [refundedIds, setRefundedIds] = useState<string[]>([]);
+  const [actionModal, setActionModal] = useState<null | { type: 'refund' | 'retry'; tab: 'student' | 'lecture'; id: string }>(null);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('refundedPayments');
+      if (raw) setRefundedIds(JSON.parse(raw));
+    } catch (e) {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('refundedPayments', JSON.stringify(refundedIds));
+    } catch (e) {
+      // ignore
+    }
+  }, [refundedIds]);
+
+  const cutoffDate = useMemo(() => {
+    const now = new Date();
+    switch (timeFilter) {
+      case 'Day':
+        return new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+      case 'Last 7 days':
+        return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      case 'Last 30 days':
+        return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      case 'Last year':
+        return new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+      default:
+        return new Date(0);
+    }
+  }, [timeFilter]);
+
+  const filteredTransactions = currentTransactions.filter(trans => {
+    // search match
+    const searchMatch = trans.name.toLowerCase().includes(searchQuery.toLowerCase()) || trans.course.toLowerCase().includes(searchQuery.toLowerCase());
+    if (!searchMatch) return false;
+    // exclude refunded (namespace by tab to avoid collisions)
+    const key = `${activeTab}:${trans.id}`;
+    if (refundedIds.includes(key)) return false;
+    // time filter match — use isoDate if present
+    const tDate = trans.isoDate ? new Date(trans.isoDate) : new Date(trans.date);
+    return tDate >= cutoffDate;
+  });
 
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -172,7 +226,7 @@ export function PaymentsPage() {
                 </div>
               </div>
               <div className="ops-payments-filter-wrapper">
-                <select className="ops-payments-filter-btn" value={timeFilter} onChange={e => setTimeFilter(e.target.value)}>
+                <select className="ops-payments-filter-btn" value={timeFilter} onChange={e => { setTimeFilter(e.target.value); setCurrentPage(1); }}>
                   <option value="Day">Day</option>
                   <option value="Last 7 days">Last 7 days</option>
                   <option value="Last 30 days">Last 30 days</option>
@@ -211,7 +265,10 @@ export function PaymentsPage() {
                           </span>
                         </td>
                         <td>
-                          <button className={`ops-payments-action-btn ${transaction.status === 'Failed' ? 'retry' : 'refund'}`}>
+                          <button
+                            className={`ops-payments-action-btn ${transaction.status === 'Failed' ? 'retry' : 'refund'}`}
+                            onClick={() => setActionModal({ type: transaction.status === 'Failed' ? 'retry' : 'refund', tab: activeTab, id: transaction.id })}
+                          >
                             {transaction.status === 'Failed' ? 'Retry' : 'Refund'}
                           </button>
                         </td>
@@ -243,6 +300,48 @@ export function PaymentsPage() {
                 </div>
               </div>
             </>}
+          {/* Action Modal (Refund / Retry) */}
+          {actionModal && (() => {
+            const list = actionModal.tab === 'student' ? studentTransactions : lecturerPayments;
+            const tx = list.find(t => t.id === actionModal.id);
+            if (!tx) return null;
+            return <div className="ops-modal-overlay" onClick={() => setActionModal(null)}>
+                <div className="ops-modal ops-modal-small" onClick={e => e.stopPropagation()}>
+                  <div className="ops-modal-header">
+                    <h2 className="ops-modal-title">{actionModal.type === 'refund' ? 'Refund Payment' : 'Retry Payment'}</h2>
+                    <button onClick={() => setActionModal(null)} className="ops-modal-close">×</button>
+                  </div>
+                  <div className="ops-modal-body">
+                    <p>Transaction: <strong>{tx.name}</strong></p>
+                    <p>Course: {tx.course}</p>
+                    <p>Amount: {tx.amount}</p>
+                    <p>Status: {tx.status}</p>
+                    <p>Do you want to {actionModal.type === 'refund' ? 'refund' : 'retry'} this payment?</p>
+                  </div>
+                  <div className="ops-modal-footer">
+                    <button onClick={() => setActionModal(null)} className="ops-modal-btn cancel">Cancel</button>
+                    <button onClick={() => {
+                      if (actionModal.type === 'refund') {
+                        // add to refundedIds (namespace by tab)
+                        const key = `${actionModal.tab}:${actionModal.id}`;
+                        setRefundedIds(prev => {
+                          const next = Array.from(new Set([...prev, key]));
+                          return next;
+                        });
+                      } else {
+                        // retry: update only the corresponding state list
+                        if (actionModal.tab === 'student') {
+                          setStudentTransactions(prev => prev.map(p => p.id === actionModal.id ? { ...p, status: 'Complete' } : p));
+                        } else {
+                          setLecturerPayments(prev => prev.map(p => p.id === actionModal.id ? { ...p, status: 'Complete' } : p));
+                        }
+                      }
+                      setActionModal(null);
+                    }} className="ops-modal-btn save">{actionModal.type === 'refund' ? 'Confirm Refund' : 'Confirm Retry'}</button>
+                  </div>
+                </div>
+              </div>;
+          })()}
           {activeTab === 'lecture' && <>
               <div className="ops-payments-stats">
                 <div className="ops-payments-stat-card">
@@ -267,7 +366,7 @@ export function PaymentsPage() {
                 </div>
               </div>
               <div className="ops-payments-filter-wrapper">
-                <select className="ops-payments-filter-btn" value={timeFilter} onChange={e => setTimeFilter(e.target.value)}>
+                <select className="ops-payments-filter-btn" value={timeFilter} onChange={e => { setTimeFilter(e.target.value); setCurrentPage(1); }}>
                   <option value="Day">Day</option>
                   <option value="Last 7 days">Last 7 days</option>
                   <option value="Last 30 days">Last 30 days</option>

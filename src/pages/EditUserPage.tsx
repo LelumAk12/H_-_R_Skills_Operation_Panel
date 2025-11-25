@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
@@ -14,6 +14,7 @@ export function EditUserPage() {
     id: string;
   }>();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     getStudentById,
     getLecturerById,
@@ -43,7 +44,13 @@ export function EditUserPage() {
         status: student.status,
         registrationDate: student.registeredDate,
         address: student.address,
-        dateOfBirth: student.dateOfBirth,
+        dateOfBirth: (() => {
+          try {
+            const d = new Date(student.dateOfBirth || '');
+            if (!isNaN(d.getTime())) return d.toISOString().slice(0, 10);
+          } catch (e) {}
+          return '';
+        })(),
         photo: student.photo || ''
       });
       return;
@@ -63,6 +70,46 @@ export function EditUserPage() {
       });
     }
   }, [id, getStudentById, getLecturerById]);
+
+  // Phone input handlers: prevent letters and sanitize paste
+  const handlePhoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = [
+      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Tab',
+    ];
+    if (allowedKeys.includes(e.key)) return;
+    // allow ctrl/cmd combinations
+    if (e.ctrlKey || e.metaKey) return;
+    // allow digits and common phone chars
+    const allowedChars = /[0-9+\-() ]/;
+    if (e.key.length === 1 && !allowedChars.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handlePhonePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const paste = e.clipboardData.getData('text');
+    // keep only digits and common phone characters
+    const sanitized = paste.replace(/[^0-9+\-() ]+/g, '');
+    if (sanitized !== paste) {
+      e.preventDefault();
+      const input = e.currentTarget;
+      const start = input.selectionStart || 0;
+      const end = input.selectionEnd || 0;
+      const newValue = input.value.slice(0, start) + sanitized + input.value.slice(end);
+      setFormData({ ...formData, contactNumber: newValue });
+    }
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // sanitize value to allowed chars
+    const sanitized = e.target.value.replace(/[^0-9+\-() ]+/g, '');
+    setFormData({ ...formData, contactNumber: sanitized });
+  };
+
+  const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // e.target.value is in yyyy-mm-dd (ISO) format; store as-is
+    setFormData({ ...formData, dateOfBirth: e.target.value });
+  };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -94,23 +141,44 @@ export function EditUserPage() {
     }
     navigate('/operations/user-management');
   };
-  const handleDeactivate = () => {
-    if (!id || !userType) return;
-    if (userType === 'student') {
-      updateStudent(id, {
-        status: 'Inactive'
-      });
-      toast.success('Student account deactivated');
-    } else {
-      updateLecturer(id, {
-        status: 'Inactive'
-      });
-      toast.success('Lecturer account deactivated');
-    }
-    navigate('/operations/user-management');
-  };
   const handleResetPassword = () => {
     toast.success('Password reset link sent to ' + formData.email);
+  };
+  
+  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const photoUrl = event.target?.result as string;
+        setFormData({
+          ...formData,
+          photo: photoUrl
+        });
+        toast.success('Photo uploaded successfully');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleToggleAccountStatus = () => {
+    if (!id || !userType) return;
+    const newStatus = formData.status === 'Active' ? 'Inactive' : 'Active';
+    if (userType === 'student') {
+      updateStudent(id, {
+        status: newStatus
+      });
+      toast.success(newStatus === 'Active' ? 'Student account activated' : 'Student account deactivated');
+    } else {
+      updateLecturer(id, {
+        status: newStatus
+      });
+      toast.success(newStatus === 'Active' ? 'Lecturer account activated' : 'Lecturer account deactivated');
+    }
+    setFormData({
+      ...formData,
+      status: newStatus
+    });
   };
   if (!userType) {
     return <>
@@ -140,7 +208,14 @@ export function EditUserPage() {
               </h2>
               <p className="ops-edit-user-profile-email">{formData.email}</p>
             </div>
-            <button className="ops-edit-user-upload-btn" onClick={() => toast.info('Photo upload feature coming soon')}>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoUpload}
+              style={{ display: 'none' }}
+            />
+            <button className="ops-edit-user-upload-btn" onClick={() => fileInputRef.current?.click()}>
               <UploadIcon className="ops-edit-user-upload-icon" />
               Upload Photo
             </button>
@@ -161,14 +236,17 @@ export function EditUserPage() {
               <div className="ops-edit-user-form-row">
                 <div className="ops-edit-user-form-group">
                   <label className="ops-edit-user-label">Contact Number</label>
-                  <input type="text" name="contactNumber" value={formData.contactNumber} onChange={handleChange} className="ops-edit-user-input" />
-                </div>
-                <div className="ops-edit-user-form-group">
-                  <label className="ops-edit-user-label">Status</label>
-                  <select name="status" value={formData.status} onChange={handleChange} className="ops-edit-user-select">
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                  </select>
+                  <input
+                    type="tel"
+                    name="contactNumber"
+                    value={formData.contactNumber}
+                    onChange={handlePhoneChange}
+                    onKeyDown={handlePhoneKeyDown}
+                    onPaste={handlePhonePaste}
+                    inputMode="tel"
+                    className="ops-edit-user-input"
+                    placeholder="e.g. 0771234567"
+                  />
                 </div>
               </div>
               {userType === 'student' && <>
@@ -181,7 +259,13 @@ export function EditUserPage() {
                       <label className="ops-edit-user-label">
                         Date of Birth
                       </label>
-                      <input type="text" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} className="ops-edit-user-input" />
+                      <input
+                        type="date"
+                        name="dateOfBirth"
+                        value={formData.dateOfBirth}
+                        onChange={handleDobChange}
+                        className="ops-edit-user-input"
+                      />
                     </div>
                   </div>
                 </>}
@@ -208,17 +292,23 @@ export function EditUserPage() {
                   Send Reset Link
                 </button>
               </div>
-              <div className="ops-edit-user-account-item danger">
+              <div className={`ops-edit-user-account-item ${formData.status === 'Inactive' ? 'success' : 'danger'}`}>
                 <div>
-                  <h3 className="ops-edit-user-account-title danger">
-                    Deactivate Account
+                  <h3 className={`ops-edit-user-account-title ${formData.status === 'Inactive' ? 'success' : 'danger'}`}>
+                    {formData.status === 'Active' ? 'Deactivate Account' : 'Activate Account'}
                   </h3>
                   <p className="ops-edit-user-account-description">
-                    This will suspend the {userType}'s access to the LMS.
+                    {formData.status === 'Active' 
+                      ? `This will suspend the ${userType}'s access to the LMS.`
+                      : `This will restore the ${userType}'s access to the LMS.`
+                    }
                   </p>
                 </div>
-                <button onClick={handleDeactivate} className="ops-edit-user-account-btn deactivate">
-                  Deactivate Account
+                <button 
+                  onClick={handleToggleAccountStatus} 
+                  className={`ops-edit-user-account-btn ${formData.status === 'Active' ? 'deactivate' : 'activate'}`}
+                >
+                  {formData.status === 'Active' ? 'Deactivate Account' : 'Activate Account'}
                 </button>
               </div>
             </div>
