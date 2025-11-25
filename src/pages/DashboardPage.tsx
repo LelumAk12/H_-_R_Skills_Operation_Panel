@@ -90,7 +90,8 @@ export function DashboardPage() {
   const completedPercentage = useMemo(() => {
     return completionDataByFilter[timeFilter as keyof typeof completionDataByFilter] || 75;
   }, [timeFilter]);
-  return <div className="ops-dashboard-page">
+    return <>
+      <div className="ops-dashboard-page">
       <OperationsSidebar />
       <div className="ops-dashboard-main">
         <OperationsHeader />
@@ -183,7 +184,9 @@ export function DashboardPage() {
             </div>
           </div>
         </div>
-        <OperationsFooter />
+        
       </div>
-    </div>;
+    </div>
+      <OperationsFooter />
+    </>;
 }

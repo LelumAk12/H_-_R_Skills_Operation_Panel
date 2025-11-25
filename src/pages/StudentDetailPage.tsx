@@ -15,18 +15,21 @@ export function StudentDetailPage() {
   } = useOperations();
   const student = id ? getStudentById(id) : undefined;
   if (!student) {
-    return <div className="ops-student-detail-page">
+    return <>
+      <div className="ops-student-detail-page">
         <OperationsSidebar />
         <div className="ops-student-detail-main">
           <OperationsHeader />
           <div className="ops-student-detail-content">
             <p>Student not found</p>
           </div>
-          <OperationsFooter />
         </div>
-      </div>;
+      </div>
+      <OperationsFooter />
+    </>;
   }
-  return <div className="ops-student-detail-page">
+    return <>
+      <div className="ops-student-detail-page">
       <OperationsSidebar />
       <div className="ops-student-detail-main">
         <OperationsHeader />
@@ -154,7 +157,9 @@ export function StudentDetailPage() {
             </div>
           </div>
         </div>
-        <OperationsFooter />
+        
       </div>
-    </div>;
+    </div>
+    <OperationsFooter />
+    </>;
 }

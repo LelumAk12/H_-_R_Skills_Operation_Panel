@@ -37,7 +37,8 @@ export function UserManagementPage() {
     }
     setDeleteConfirm(null);
   };
-  return <div className="ops-user-management-page">
+    return <>
+      <div className="ops-user-management-page">
       <OperationsSidebar />
       <div className="ops-user-management-main">
         <OperationsHeader />
@@ -143,9 +144,7 @@ export function UserManagementPage() {
               </table>
             </div>}
         </div>
-        <OperationsFooter />
       </div>
-      
       {/* Delete Confirmation Modal */}
       {deleteConfirm && <div className="ops-modal-overlay" onClick={() => setDeleteConfirm(null)}>
           <div className="ops-modal ops-modal-small" onClick={e => e.stopPropagation()}>
@@ -172,5 +171,7 @@ export function UserManagementPage() {
             </div>
           </div>
         </div>}
-    </div>;
+    </div>
+  <OperationsFooter />
+  </>;
 }

@@ -153,7 +153,8 @@ export function AnnouncementPage() {
 
   const endingIndex = Math.min(startIndex + itemsPerPage, filteredAnnouncements.length);
 
-  return <div className="ops-announcement-page">
+  return <>
+    <div className="ops-announcement-page">
       <OperationsSidebar />
       <div className="ops-announcement-main">
         <OperationsHeader />
@@ -281,7 +282,6 @@ export function AnnouncementPage() {
             </div>
           </div>
         </div>
-        <OperationsFooter />
       </div>
 
       {/* View Modal */}
@@ -394,5 +394,7 @@ export function AnnouncementPage() {
           </div>
         </div>
       )}
-    </div>;
+    </div>
+    <OperationsFooter />
+  </>;
 }

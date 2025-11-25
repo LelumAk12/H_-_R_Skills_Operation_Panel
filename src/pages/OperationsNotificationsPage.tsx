@@ -25,7 +25,8 @@ export function OperationsNotificationsPage() {
 
   const viewed = viewNotification ? notifications.find(n => n.id === viewNotification) : null;
 
-  return <div className="ops-notifications-page">
+  return <>
+    <div className="ops-notifications-page">
       <OperationsSidebar />
       <div className="ops-notifications-main">
         <OperationsHeader />
@@ -53,9 +54,7 @@ export function OperationsNotificationsPage() {
               </div>)}
           </div>
         </div>
-        <OperationsFooter />
       </div>
-
       {viewNotification && viewed && <div className="ops-modal-overlay" onClick={() => setViewNotification(null)}>
           <div className="ops-modal ops-modal-large" onClick={e => e.stopPropagation()}>
             <div className="ops-modal-header">
@@ -74,5 +73,7 @@ export function OperationsNotificationsPage() {
             </div>
           </div>
         </div>}
-    </div>;
+    </div>
+    <OperationsFooter />
+  </>;
 }

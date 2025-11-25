@@ -123,7 +123,8 @@ export function PaymentsPage() {
     setCurrentPage(1);
     setSearchQuery('');
   };
-  return <div className="ops-payments-page">
+  return <>
+    <div className="ops-payments-page">
       <OperationsSidebar />
       <div className="ops-payments-main">
         <OperationsHeader />
@@ -332,7 +333,8 @@ export function PaymentsPage() {
               </div>
             </>}
         </div>
-        <OperationsFooter />
       </div>
-    </div>;
+    </div>
+    <OperationsFooter />
+  </>;
 }

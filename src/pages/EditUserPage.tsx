@@ -113,18 +113,21 @@ export function EditUserPage() {
     toast.success('Password reset link sent to ' + formData.email);
   };
   if (!userType) {
-    return <div className="ops-edit-user-page">
+    return <>
+      <div className="ops-edit-user-page">
         <OperationsSidebar />
         <div className="ops-edit-user-main">
           <OperationsHeader />
           <div className="ops-edit-user-content">
             <p>User not found</p>
           </div>
-          <OperationsFooter />
         </div>
-      </div>;
+      </div>
+      <OperationsFooter />
+    </>;
   }
-  return <div className="ops-edit-user-page">
+    return <>
+      <div className="ops-edit-user-page">
       <OperationsSidebar />
       <div className="ops-edit-user-main">
         <OperationsHeader />
@@ -226,7 +229,9 @@ export function EditUserPage() {
             </button>
           </div>
         </div>
-        <OperationsFooter />
+        
       </div>
-    </div>;
+    </div>
+    <OperationsFooter />
+    </>;
 }

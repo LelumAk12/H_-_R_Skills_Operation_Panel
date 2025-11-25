@@ -1,8 +1,9 @@
 .ops-footer {
   background-color: #1a2847;
   color: #ffffff;
-  padding: 15px;
-  margin-top: auto;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 24px 0;
 }
 .ops-footer-content {
   display: grid;
@@ -10,6 +11,7 @@
   gap: 48px;
   max-width: 1400px;
   margin: 0 auto 32px;
+  padding: 0 24px;
 }
 .ops-footer-section {
   display: flex;

@@ -39,7 +39,8 @@ export function LecturerDetailPage() {
       institution: 'of teaching and research experience'
     }]
   };
-  return <div className="ops-lecturer-detail-page">
+  return <>
+    <div className="ops-lecturer-detail-page">
       <OperationsSidebar />
       <div className="ops-lecturer-detail-main">
         <OperationsHeader />
@@ -124,7 +125,8 @@ export function LecturerDetailPage() {
             </div>
           </div>
         </div>
-        <OperationsFooter />
       </div>
-    </div>;
+    </div>
+    <OperationsFooter />
+  </>;
 }

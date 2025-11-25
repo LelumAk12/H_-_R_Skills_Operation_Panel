@@ -73,7 +73,8 @@ export function OperationsSettingsPage() {
     setHasChanges(false);
   };
 
-  return <div className="ops-settings-page">
+  return <>
+    <div className="ops-settings-page">
       <OperationsSidebar />
       <div className="ops-settings-main">
         <OperationsHeader />
@@ -149,7 +150,8 @@ export function OperationsSettingsPage() {
             </div>
           </div>
         </div>
-        <OperationsFooter />
       </div>
-    </div>;
+    </div>
+    <OperationsFooter />
+  </>;
 }

@@ -25,7 +25,8 @@ export function CourseManagementPage() {
     lecturer: 'Ms. Ishara Jayasinghe',
     status: 'Rejected'
   }];
-  return <div className="ops-course-management-page">
+  return <>
+    <div className="ops-course-management-page">
       <OperationsSidebar />
       <div className="ops-course-management-main">
         <OperationsHeader />
@@ -62,7 +63,8 @@ export function CourseManagementPage() {
             </table>
           </div>
         </div>
-        <OperationsFooter />
       </div>
-    </div>;
+    </div>
+    <OperationsFooter />
+  </>;
 }
