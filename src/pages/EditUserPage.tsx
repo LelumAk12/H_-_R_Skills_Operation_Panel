@@ -79,31 +79,71 @@ export function EditUserPage() {
     if (allowedKeys.includes(e.key)) return;
     // allow ctrl/cmd combinations
     if (e.ctrlKey || e.metaKey) return;
-    // allow digits and common phone chars
-    const allowedChars = /[0-9+\-() ]/;
+    // allow digits and plus only
+    const allowedChars = /[0-9+]/;
     if (e.key.length === 1 && !allowedChars.test(e.key)) {
+      e.preventDefault();
+      return;
+    }
+
+    // enforce length rules based on prefix
+    const input = e.currentTarget;
+    const start = input.selectionStart || 0;
+    const end = input.selectionEnd || 0;
+    const current = input.value || '';
+    const next = current.slice(0, start) + e.key + current.slice(end);
+
+    const getAllowedMax = (val: string) => {
+      if (val.startsWith('+94')) return 12; // includes '+'
+      if (val.startsWith('0')) return 10;
+      if (val.startsWith('+')) return 15; // generic international max
+      return 10; // default local length
+    };
+
+    const allowedMax = getAllowedMax(next);
+    if (next.length > allowedMax) {
       e.preventDefault();
     }
   };
 
   const handlePhonePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     const paste = e.clipboardData.getData('text');
-    // keep only digits and common phone characters
-    const sanitized = paste.replace(/[^0-9+\-() ]+/g, '');
-    if (sanitized !== paste) {
-      e.preventDefault();
-      const input = e.currentTarget;
-      const start = input.selectionStart || 0;
-      const end = input.selectionEnd || 0;
-      const newValue = input.value.slice(0, start) + sanitized + input.value.slice(end);
-      setFormData({ ...formData, contactNumber: newValue });
-    }
+    // keep only digits and plus
+    const sanitized = paste.replace(/[^0-9+]+/g, '');
+    const input = e.currentTarget;
+    const start = input.selectionStart || 0;
+    const end = input.selectionEnd || 0;
+    let newValue = input.value.slice(0, start) + sanitized + input.value.slice(end);
+
+    const getAllowedMax = (val: string) => {
+      if (val.startsWith('+94')) return 12;
+      if (val.startsWith('0')) return 10;
+      if (val.startsWith('+')) return 15;
+      return 10;
+    };
+
+    const allowedMax = getAllowedMax(newValue);
+    if (newValue.length > allowedMax) newValue = newValue.slice(0, allowedMax);
+    e.preventDefault();
+    setFormData({ ...formData, contactNumber: newValue });
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // sanitize value to allowed chars
-    const sanitized = e.target.value.replace(/[^0-9+\-() ]+/g, '');
-    setFormData({ ...formData, contactNumber: sanitized });
+    // sanitize value to allowed chars (digits and plus only)
+    let v = e.target.value.replace(/[^0-9+]+/g, '');
+    // ensure '+' only at start
+    if (v.indexOf('+') > 0) v = v.replace(/\+/g, '');
+    // enforce length rules
+    if (v.startsWith('+94')) {
+      if (v.length > 12) v = v.slice(0, 12);
+    } else if (v.startsWith('0')) {
+      if (v.length > 10) v = v.slice(0, 10);
+    } else if (v.startsWith('+')) {
+      if (v.length > 15) v = v.slice(0, 15);
+    } else {
+      if (v.length > 10) v = v.slice(0, 10);
+    }
+    setFormData({ ...formData, contactNumber: v });
   };
 
   const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,31 +285,32 @@ export function EditUserPage() {
                     onPaste={handlePhonePaste}
                     inputMode="tel"
                     className="ops-edit-user-input"
+                    maxLength={formData.contactNumber.startsWith('+94') ? 12 : formData.contactNumber.startsWith('0') ? 10 : 15}
                     placeholder="e.g. 0771234567"
                   />
                 </div>
-              </div>
-              {userType === 'student' && <>
-                  <div className="ops-edit-user-form-row">
-                    <div className="ops-edit-user-form-group">
-                      <label className="ops-edit-user-label">Address</label>
-                      <input type="text" name="address" value={formData.address} onChange={handleChange} className="ops-edit-user-input" />
-                    </div>
-                    <div className="ops-edit-user-form-group">
-                      <label className="ops-edit-user-label">
-                        Date of Birth
-                      </label>
-                      <input
-                        type="date"
-                        name="dateOfBirth"
-                        value={formData.dateOfBirth}
-                        onChange={handleDobChange}
-                        className="ops-edit-user-input"
-                      />
-                    </div>
+                {userType === 'student' && (
+                  <div className="ops-edit-user-form-group">
+                    <label className="ops-edit-user-label">Date of Birth</label>
+                    <input
+                      type="date"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
+                      onChange={handleDobChange}
+                      className="ops-edit-user-input"
+                    />
                   </div>
-                </>}
-              <div className="ops-edit-user-form-group">
+                )}
+              </div>
+              {userType === 'student' && (
+                <div className="ops-edit-user-form-row">
+                  <div className="ops-edit-user-form-group full-width">
+                    <label className="ops-edit-user-label">Address</label>
+                    <input type="text" name="address" value={formData.address} onChange={handleChange} className="ops-edit-user-input" />
+                  </div>
+                </div>
+              )}
+              <div className="ops-edit-user-form-group full-width">
                 <label className="ops-edit-user-label">Registration Date</label>
                 <input type="text" name="registrationDate" value={formData.registrationDate} onChange={handleChange} className="ops-edit-user-input" disabled />
               </div>

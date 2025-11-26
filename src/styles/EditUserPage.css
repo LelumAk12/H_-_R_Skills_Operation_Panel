@@ -93,6 +93,9 @@
   display: flex;
   flex-direction: column;
 }
+.ops-edit-user-form-group.full-width {
+  grid-column: 1 / -1;
+}
 .ops-edit-user-label {
   font-size: 14px;
   font-weight: 600;
