@@ -119,6 +119,21 @@
   background-color: #f3f4f6;
   color: #9ca3af;
 }
+
+.ops-edit-user-input.invalid {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.06);
+}
+.ops-edit-user-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.ops-edit-user-dob-group {
+  cursor: text;
+}
 .ops-edit-user-account-actions {
   display: flex;
   flex-direction: column;

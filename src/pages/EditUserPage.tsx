@@ -15,6 +15,8 @@ export function EditUserPage() {
   }>();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const phoneRef = useRef<HTMLInputElement | null>(null);
+  const dobRef = useRef<HTMLInputElement | null>(null);
   const {
     getStudentById,
     getLecturerById,
@@ -32,6 +34,7 @@ export function EditUserPage() {
     dateOfBirth: '',
     photo: ''
   });
+  const [phoneError, setPhoneError] = useState<string>('');
   useEffect(() => {
     if (!id) return;
     const student = getStudentById(id);
@@ -144,12 +147,30 @@ export function EditUserPage() {
       if (v.length > 10) v = v.slice(0, 10);
     }
     setFormData({ ...formData, contactNumber: v });
+    const digitCount = v.replace(/\D/g, '').length;
+    if (digitCount >= 10) setPhoneError('');
   };
 
   const handleDobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // e.target.value is in yyyy-mm-dd (ISO) format; store as-is
     setFormData({ ...formData, dateOfBirth: e.target.value });
   };
+
+  // close DOB picker when clicking outside
+  useEffect(() => {
+    const handleDocClick = (e: MouseEvent) => {
+      if (!dobRef.current) return;
+      const target = e.target as Node;
+      // if the dob input is the active element and the click was outside input or its parent, blur it
+      if (document.activeElement === dobRef.current) {
+        if (!dobRef.current.contains(target) && !dobRef.current.parentElement?.contains(target)) {
+          dobRef.current.blur();
+        }
+      }
+    };
+    document.addEventListener('click', handleDocClick);
+    return () => document.removeEventListener('click', handleDocClick);
+  }, []);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
@@ -158,6 +179,20 @@ export function EditUserPage() {
   };
   const handleSave = () => {
     if (!id || !userType) return;
+    // validate phone: require at least 10 digits
+    const digitCount = formData.contactNumber.replace(/\D/g, '').length;
+    if (digitCount < 10) {
+      setPhoneError('Phone number must contain at least 10 digits');
+      // focus and scroll to phone input so user sees the error
+      if (phoneRef.current) {
+        phoneRef.current.focus();
+        try {
+          phoneRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } catch (e) {}
+      }
+      return;
+    }
+    setPhoneError('');
     if (userType === 'student') {
       updateStudent(id, {
         name: formData.fullName,
@@ -284,15 +319,32 @@ export function EditUserPage() {
                     onKeyDown={handlePhoneKeyDown}
                     onPaste={handlePhonePaste}
                     inputMode="tel"
-                    className="ops-edit-user-input"
+                    ref={phoneRef}
+                    className={`ops-edit-user-input ${phoneError ? 'invalid' : ''}`}
                     maxLength={formData.contactNumber.startsWith('+94') ? 12 : formData.contactNumber.startsWith('0') ? 10 : 15}
                     placeholder="e.g. 0771234567"
                   />
+                  {phoneError && <span className="ops-edit-user-error">{phoneError}</span>}
                 </div>
                 {userType === 'student' && (
-                  <div className="ops-edit-user-form-group">
+                  <div
+                    className="ops-edit-user-form-group ops-edit-user-dob-group"
+                    onClick={() => {
+                      // focus and open native picker when clicking anywhere in the group
+                      if (dobRef.current) {
+                        dobRef.current.focus();
+                        // showPicker is available on some browsers (Chromium-based)
+                        if (typeof (dobRef.current as any).showPicker === 'function') {
+                          try {
+                            (dobRef.current as any).showPicker();
+                          } catch (e) {}
+                        }
+                      }
+                    }}
+                  >
                     <label className="ops-edit-user-label">Date of Birth</label>
                     <input
+                      ref={dobRef}
                       type="date"
                       name="dateOfBirth"
                       value={formData.dateOfBirth}

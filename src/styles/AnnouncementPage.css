@@ -92,6 +92,19 @@
   font-size: 15px;
   color: #1a2847;
 }
+.ops-announcement-input.invalid,
+.ops-announcement-select.invalid,
+.ops-announcement-textarea.invalid,
+.ops-announcement-modal-input.invalid {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220,38,38,0.06);
+}
+.ops-announcement-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin-top: 6px;
+  display: inline-block;
+}
 .ops-announcement-input:focus,
 .ops-announcement-select:focus {
   outline: none;
@@ -490,10 +503,13 @@
   top: 100%;
   right: 0;
   margin-top: 8px;
-  z-index: 1001;
+  z-index: 2000; /* ensure it's above modals and other overlays */
   background-color: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  padding: 6px; /* small padding around the picker */
+  min-width: 320px;
 }
 
 .ops-announcement-calendar-picker {

@@ -87,6 +87,11 @@ export function AnnouncementPage() {
     description: '',
     scheduleDate: ''
   });
+  const [errors, setErrors] = useState<{ [k: string]: string }>({});
+  const titleRef = useRef<HTMLInputElement | null>(null);
+  const audienceRef = useRef<HTMLSelectElement | null>(null);
+  const descriptionRef = useRef<HTMLTextAreaElement | null>(null);
+  const scheduleInputRef = useRef<HTMLInputElement | null>(null);
   const [viewModal, setViewModal] = useState<any>(null);
   const [editModal, setEditModal] = useState<any>(null);
   const [editFormData, setEditFormData] = useState({
@@ -130,6 +135,8 @@ export function AnnouncementPage() {
       ...formData,
       [e.target.name]: e.target.value
     });
+    // clear error for this field when user types
+    setErrors(prev => ({ ...prev, [e.target.name]: '' }));
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,36 +154,80 @@ export function AnnouncementPage() {
       ...formData,
       scheduleDate: value
     });
+    setErrors(prev => ({ ...prev, scheduleDate: '' }));
   };
 
   const handlePostNow = () => {
-    if (formData.title && formData.audience && formData.description) {
-      addAnnouncement({
-        title: formData.title,
-        audience: formData.audience,
-        description: formData.description,
-        status: 'Active',
-        date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
-        scheduleDate: formData.scheduleDate || undefined
-      });
-      setFormData({ title: '', audience: '', description: '', scheduleDate: '' });
-      setCurrentPage(1);
+    // validate required fields: title, audience, description
+    const newErrors: { [k: string]: string } = {};
+    if (!formData.title?.trim()) newErrors.title = 'Title is required';
+    if (!formData.audience?.trim()) newErrors.audience = 'Audience is required';
+    if (!formData.description?.trim()) newErrors.description = 'Description is required';
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // focus first invalid field
+      if (newErrors.title && titleRef.current) {
+        titleRef.current.focus();
+        titleRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.audience && audienceRef.current) {
+        audienceRef.current.focus();
+        audienceRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.description && descriptionRef.current) {
+        descriptionRef.current.focus();
+        descriptionRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
     }
+    // clear errors if any
+    setErrors({});
+    addAnnouncement({
+      title: formData.title,
+      audience: formData.audience,
+      description: formData.description,
+      status: 'Active',
+      date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+      scheduleDate: formData.scheduleDate || undefined
+    });
+    setFormData({ title: '', audience: '', description: '', scheduleDate: '' });
+    setCurrentPage(1);
   };
 
   const handleSchedule = () => {
-    if (formData.title && formData.audience && formData.description && formData.scheduleDate) {
-      addAnnouncement({
-        title: formData.title,
-        audience: formData.audience,
-        description: formData.description,
-        status: 'Scheduled',
-        date: formData.scheduleDate,
-        scheduleDate: formData.scheduleDate
-      });
-      setFormData({ title: '', audience: '', description: '', scheduleDate: '' });
-      setCurrentPage(1);
+    // validate required fields: title, audience, description, scheduleDate
+    const newErrors: { [k: string]: string } = {};
+    if (!formData.title?.trim()) newErrors.title = 'Title is required';
+    if (!formData.audience?.trim()) newErrors.audience = 'Audience is required';
+    if (!formData.description?.trim()) newErrors.description = 'Description is required';
+    if (!formData.scheduleDate?.trim()) newErrors.scheduleDate = 'Schedule date is required';
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      // focus first invalid field in order
+      if (newErrors.title && titleRef.current) {
+        titleRef.current.focus();
+        titleRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.audience && audienceRef.current) {
+        audienceRef.current.focus();
+        audienceRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.description && descriptionRef.current) {
+        descriptionRef.current.focus();
+        descriptionRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (newErrors.scheduleDate && scheduleInputRef.current) {
+        scheduleInputRef.current.focus();
+        scheduleInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      return;
     }
+    setErrors({});
+    addAnnouncement({
+      title: formData.title,
+      audience: formData.audience,
+      description: formData.description,
+      status: 'Scheduled',
+      date: formData.scheduleDate,
+      scheduleDate: formData.scheduleDate
+    });
+    setFormData({ title: '', audience: '', description: '', scheduleDate: '' });
+    setCurrentPage(1);
   };
 
   const handlePageChange = (pageNum: number) => {
@@ -269,22 +320,25 @@ export function AnnouncementPage() {
                   <label className="ops-announcement-label">
                     Announcement Title
                   </label>
-                  <input type="text" name="title" placeholder="Enter Title" value={formData.title} onChange={handleChange} className="ops-announcement-input" />
+                  <input ref={titleRef} type="text" name="title" placeholder="Enter Title" value={formData.title} onChange={handleChange} className={`ops-announcement-input ${errors.title ? 'invalid' : ''}`} />
+                  {errors.title && <span className="ops-announcement-error">{errors.title}</span>}
                 </div>
                 <div className="ops-announcement-form-group">
                   <label className="ops-announcement-label">Audience</label>
-                  <select name="audience" value={formData.audience} onChange={handleChange} className="ops-announcement-select">
+                  <select ref={audienceRef} name="audience" value={formData.audience} onChange={handleChange} className={`ops-announcement-select ${errors.audience ? 'invalid' : ''}`}>
                     <option value="">Select Audience</option>
                     <option value="All Users">All Users</option>
                     <option value="Students">Students</option>
                     <option value="Lecturers">Lecturers</option>
                   </select>
+                  {errors.audience && <span className="ops-announcement-error">{errors.audience}</span>}
                 </div>
               </div>
               <div className="ops-announcement-form-row">
                 <div className="ops-announcement-form-group ops-announcement-description">
                   <label className="ops-announcement-label">Description</label>
-                  <textarea name="description" placeholder="Enter Description" value={formData.description} onChange={handleChange} className="ops-announcement-textarea" rows={4} />
+                  <textarea ref={descriptionRef} name="description" placeholder="Enter Description" value={formData.description} onChange={handleChange} className={`ops-announcement-textarea ${errors.description ? 'invalid' : ''}`} rows={4} />
+                  {errors.description && <span className="ops-announcement-error">{errors.description}</span>}
                 </div>
                 <div className="ops-announcement-form-group">
                   <label className="ops-announcement-label">
@@ -293,6 +347,7 @@ export function AnnouncementPage() {
                   <div className="ops-announcement-date-input-wrapper" ref={createCalendarRef}>
                     <input 
                       type="text" 
+                      ref={scheduleInputRef}
                       name="scheduleDate" 
                       placeholder="mm/dd/yyyy" 
                       maxLength={10} 
@@ -323,6 +378,7 @@ export function AnnouncementPage() {
                       </div>
                     )}
                   </div>
+                  {errors.scheduleDate && <span className="ops-announcement-error">{errors.scheduleDate}</span>}
                 </div>
               </div>
               <div className="ops-announcement-actions">
