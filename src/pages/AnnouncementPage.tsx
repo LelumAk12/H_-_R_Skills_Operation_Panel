@@ -98,7 +98,8 @@ export function AnnouncementPage() {
     title: '',
     audience: '',
     description: '',
-    scheduleDate: ''
+    scheduleDate: '',
+    status: 'Active'
   });
   const [showCreateCalendar, setShowCreateCalendar] = useState(false);
   const [showEditCalendar, setShowEditCalendar] = useState(false);
@@ -253,7 +254,8 @@ export function AnnouncementPage() {
       title: announcement.title,
       audience: announcement.audience,
       description: announcement.description,
-      scheduleDate: announcement.scheduleDate || ''
+      scheduleDate: announcement.scheduleDate || '',
+      status: announcement.status || 'Active'
     });
   };
 
@@ -286,6 +288,7 @@ export function AnnouncementPage() {
         title: editFormData.title,
         audience: editFormData.audience,
         description: editFormData.description,
+        status: editFormData.status || editModal.status,
         scheduleDate: editFormData.scheduleDate || undefined,
         date: editFormData.scheduleDate || editModal.date
       });
@@ -540,6 +543,19 @@ export function AnnouncementPage() {
                   <option value="Lecturers">Lecturers</option>
                 </select>
               </div>
+                <div className="ops-announcement-modal-field">
+                  <label>Status</label>
+                  <select
+                    name="status"
+                    value={editFormData.status}
+                    onChange={handleEditChange}
+                    className="ops-announcement-modal-select"
+                  >
+                    <option value="Active">Active</option>
+                    <option value="Scheduled">Scheduled</option>
+                    <option value="Draft">Draft</option>
+                  </select>
+                </div>
               <div className="ops-announcement-modal-field">
                 <label>Description</label>
                 <textarea 

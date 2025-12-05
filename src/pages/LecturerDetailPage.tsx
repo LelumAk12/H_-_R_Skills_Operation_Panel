@@ -4,41 +4,29 @@ import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { GraduationCapIcon } from 'lucide-react';
 import '../styles/LecturerDetailPage.css';
+import { useOperations } from '../context/OperationsContext';
 export function LecturerDetailPage() {
   const {
     id
   } = useParams<{
     id: string;
   }>();
-  void id;
-  const lecturer = {
-    id: '1',
-    name: 'Dr. Malsha Karunaratne',
-    title: 'Senior Lecturer in Biomedical Science',
-    status: 'Active',
-    email: 'malsha@gmail.com',
-    phone: '*** **** 123',
-    totalCourses: 12,
-    averageRating: 4.8,
-    totalStudents: 1204,
-    bio: 'Dr. Malsha Karunaratne is a passionate educator and researcher in the field of Biomedical Science, specializing in Human Physiology and Bioethics. With a deep commitment to academic excellence, she brings both clinical insight and scientific knowledge into the classroom.',
-    qualifications: [{
-      degree: 'MBBS',
-      institution: 'University of Colombo (2012)'
-    }, {
-      degree: 'MSc in Biomedical Science',
-      institution: 'University of London (2016)'
-    }, {
-      degree: 'PhD in Physiology',
-      institution: 'National University of Singapore (2020)'
-    }, {
-      degree: 'Certified in Bioethics and Research Ethics',
-      institution: 'Online Certification (2021)'
-    }, {
-      degree: '8+ years',
-      institution: 'of teaching and research experience'
-    }]
-  };
+  const { getLecturerById } = useOperations();
+  const lecturer = id ? getLecturerById(id) : undefined;
+  if (!lecturer) {
+    return <>
+      <div className="ops-lecturer-detail-page">
+        <OperationsSidebar />
+        <div className="ops-lecturer-detail-main">
+          <OperationsHeader />
+          <div className="ops-lecturer-detail-content">
+            <p>Lecturer not found</p>
+          </div>
+        </div>
+      </div>
+      <OperationsFooter />
+    </>;
+  }
   return <>
     <div className="ops-lecturer-detail-page">
       <OperationsSidebar />

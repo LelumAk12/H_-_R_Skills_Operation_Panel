@@ -41,8 +41,8 @@ export function StudentDetailPage() {
               <p className="ops-student-profile-id">
                 Student ID: {student.studentId}
               </p>
-              <span className="ops-student-profile-status active">
-                Status: Active
+              <span className={`ops-student-profile-status ${student.status.toLowerCase()}`}>
+                Status: {student.status}
               </span>
             </div>
           </div>

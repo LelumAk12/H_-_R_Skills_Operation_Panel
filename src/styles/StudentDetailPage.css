@@ -59,6 +59,10 @@
   background-color: #d1fae5;
   color: #065f46;
 }
+.ops-student-profile-status.inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
 .ops-student-details-grid {
   display: grid;
   grid-template-columns: 400px 1fr;
