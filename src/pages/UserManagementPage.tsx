@@ -1,12 +1,24 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { useOperations } from '../context/OperationsContext';
+import { useSearch } from '../context/SearchContext';
 import { EyeIcon, Trash2Icon, Edit2Icon, XIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import '../styles/UserManagementPage.css';
+
+// Search function for filtering students and lecturers
+const searchUsers = (users: any[], query: string) => {
+  if (!query.trim()) return users;
+  const lowerQuery = query.toLowerCase();
+  return users.filter(user => 
+    user.name.toLowerCase().includes(lowerQuery) || 
+    user.email.toLowerCase().includes(lowerQuery)
+  );
+};
+
 export function UserManagementPage() {
   const navigate = useNavigate();
   const {
@@ -16,15 +28,15 @@ export function UserManagementPage() {
     deleteLecturer
   } = useOperations();
   const [activeTab, setActiveTab] = useState<'students' | 'lecturers'>('students');
-  const [searchQuery, setSearchQuery] = useState('');
+  const { globalSearchQuery: searchQuery } = useSearch();
   const [deleteConfirm, setDeleteConfirm] = useState<{
     id: string;
     name: string;
     type: 'student' | 'lecturer';
   } | null>(null);
   
-  const filteredStudents = students.filter(student => student.name.toLowerCase().includes(searchQuery.toLowerCase()) || student.email.toLowerCase().includes(searchQuery.toLowerCase()));
-  const filteredLecturers = lecturers.filter(lecturer => lecturer.name.toLowerCase().includes(searchQuery.toLowerCase()) || lecturer.email.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredStudents = useMemo(() => searchUsers(students, searchQuery), [students, searchQuery]);
+  const filteredLecturers = useMemo(() => searchUsers(lecturers, searchQuery), [lecturers, searchQuery]);
   
   const handleDelete = () => {
     if (!deleteConfirm) return;
@@ -45,9 +57,6 @@ export function UserManagementPage() {
         <div className="ops-user-management-content">
           <div className="ops-user-management-header">
             <h1 className="ops-user-management-title">User Management</h1>
-          </div>
-          <div className="ops-user-search-wrapper">
-            <input type="text" placeholder="Search by name or email..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="ops-user-search-input" />
           </div>
           <div className="ops-user-management-tabs">
             <button onClick={() => setActiveTab('students')} className={`ops-tab ${activeTab === 'students' ? 'active' : ''}`}>

@@ -1,11 +1,22 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
-import { SearchIcon } from 'lucide-react';
+import { useSearch } from '../context/SearchContext';
 import '../styles/CourseManagementPage.css';
+
+// Search function for filtering courses
+const searchCourses = (courses: any[], query: string) => {
+  if (!query.trim()) return courses;
+  const lowerQuery = query.toLowerCase();
+  return courses.filter(course =>
+    course.title.toLowerCase().includes(lowerQuery) ||
+    course.lecturer.toLowerCase().includes(lowerQuery)
+  );
+};
+
 export function CourseManagementPage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const { globalSearchQuery: searchQuery } = useSearch();
   const courses = [{
     id: '1',
     title: 'Biomedical Science',
@@ -25,16 +36,14 @@ export function CourseManagementPage() {
     lecturer: 'Ms. Ishara Jayasinghe',
     status: 'Rejected'
   }];
+  
+  const filteredCourses = useMemo(() => searchCourses(courses, searchQuery), [searchQuery]);
   return <>
     <div className="ops-course-management-page">
       <OperationsSidebar />
       <div className="ops-course-management-main">
         <OperationsHeader />
         <div className="ops-course-management-content">
-          <div className="ops-course-search-wrapper">
-            <SearchIcon className="ops-course-search-icon" />
-            <input type="text" placeholder="Search by course title or lecturer..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="ops-course-search-input" />
-          </div>
           <h1 className="ops-course-management-title">Course Management</h1>
           <div className="ops-course-table-container">
             <table className="ops-course-table">
@@ -47,7 +56,7 @@ export function CourseManagementPage() {
                 </tr>
               </thead>
               <tbody>
-                {courses.map(course => <tr key={course.id}>
+                {filteredCourses.map(course => <tr key={course.id}>
                     <td className="ops-course-title-cell">{course.title}</td>
                     <td className="ops-course-level-cell">{course.level}</td>
                     <td className="ops-course-lecturer-cell">

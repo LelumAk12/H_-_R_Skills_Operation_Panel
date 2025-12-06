@@ -3,6 +3,7 @@ import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { useSearch } from '../context/SearchContext';
 import '../styles/DashboardPage.css';
 const fullRegistrationData = [{
   month: 'Jan',
@@ -82,6 +83,27 @@ const registrationDataByFilter = {
 
 export function DashboardPage() {
   const [timeFilter, setTimeFilter] = useState('Last 30 days');
+  const { globalSearchQuery: searchQuery } = useSearch();
+
+  // Define searchable content
+  const searchableContent = [
+    { id: 'students', label: 'Total Students', value: '1,250', category: 'Stats' },
+    { id: 'lecturers', label: 'Total Lectures', value: '75', category: 'Stats' },
+    { id: 'courses', label: 'Total Courses', value: '120', category: 'Stats' },
+    { id: 'earnings', label: 'Total Earnings', value: 'RS.54,300', category: 'Stats' },
+    { id: 'registrations', label: 'Student Registrations', value: 'Daily/Monthly new users', category: 'Chart' },
+    { id: 'completion', label: 'Course Completion', value: 'Completed vs In-Progress', category: 'Chart' }
+  ];
+
+  // Filter content based on search query
+  const filteredContent = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    return searchableContent.filter(item =>
+      item.label.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.value.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery]);
   
   const registrationData = useMemo(() => {
     return registrationDataByFilter[timeFilter as keyof typeof registrationDataByFilter] || fullRegistrationData;
@@ -90,6 +112,45 @@ export function DashboardPage() {
   const completedPercentage = useMemo(() => {
     return completionDataByFilter[timeFilter as keyof typeof completionDataByFilter] || 75;
   }, [timeFilter]);
+
+  // Show search results if search query exists
+  if (searchQuery.trim()) {
+    return <>
+      <div className="ops-dashboard-page">
+      <OperationsSidebar />
+      <div className="ops-dashboard-main">
+        <OperationsHeader />
+        <div className="ops-dashboard-content">
+          <div className="ops-dashboard-search-results">
+            <div className="ops-search-header">
+              <h2 className="ops-search-title">Search Results</h2>
+              <p className="ops-search-query">Results for "{searchQuery}"</p>
+            </div>
+            {filteredContent.length > 0 ? (
+              <div className="ops-search-results-list">
+                {filteredContent.map(item => (
+                  <div key={item.id} className="ops-search-result-item">
+                    <div className="ops-search-result-content">
+                      <h3 className="ops-search-result-title">{item.label}</h3>
+                      <p className="ops-search-result-description">{item.value}</p>
+                      <span className="ops-search-result-category">{item.category}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="ops-search-no-results">
+                <p>No results found for "{searchQuery}"</p>
+                <p className="ops-search-no-results-hint">Try searching for 'Students', 'Courses', 'Earnings', or 'Registrations'</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+      <OperationsFooter />
+    </>;
+  }
     return <>
       <div className="ops-dashboard-page">
       <OperationsSidebar />

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { OperationsSidebar } from '../components/OperationsSidebar';
-import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { useOperations } from '../context/OperationsContext';
 import { UploadIcon } from 'lucide-react';
@@ -260,7 +259,9 @@ export function EditUserPage() {
       <div className="ops-edit-user-page">
         <OperationsSidebar />
         <div className="ops-edit-user-main">
-          <OperationsHeader />
+          <div className="ops-edit-user-header-bar">
+            <h1 className="ops-edit-user-page-title">Edit User</h1>
+          </div>
           <div className="ops-edit-user-content">
             <p>User not found</p>
           </div>
@@ -273,7 +274,9 @@ export function EditUserPage() {
       <div className="ops-edit-user-page">
       <OperationsSidebar />
       <div className="ops-edit-user-main">
-        <OperationsHeader />
+        <div className="ops-edit-user-header-bar">
+          <h1 className="ops-edit-user-page-title">Edit User</h1>
+        </div>
         <div className="ops-edit-user-content">
           <div className="ops-edit-user-profile-section">
             <img src={formData.photo || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop'} alt="Profile" className="ops-edit-user-profile-photo" />

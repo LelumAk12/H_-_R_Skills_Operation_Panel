@@ -1,10 +1,21 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
-import { SearchIcon, EyeIcon, Edit2Icon, Trash2Icon, ChevronLeftIcon, ChevronRightIcon, Calendar } from 'lucide-react';
+import { EyeIcon, Edit2Icon, Trash2Icon, ChevronLeftIcon, ChevronRightIcon, Calendar } from 'lucide-react';
 import { useOperations } from '../context/OperationsContext';
+import { useSearch } from '../context/SearchContext';
 import '../styles/AnnouncementPage.css';
+
+// Search function for filtering announcements
+const searchAnnouncements = (announcements: any[], query: string) => {
+  if (!query.trim()) return announcements;
+  const lowerQuery = query.toLowerCase();
+  return announcements.filter(announcement =>
+    announcement.title.toLowerCase().includes(lowerQuery) ||
+    announcement.audience.toLowerCase().includes(lowerQuery)
+  );
+};
 
 // Simple Calendar Picker Component
 function CalendarPicker({ value, onChange, onClose }: { value: string; onChange: (date: string) => void; onClose: () => void }) {
@@ -79,7 +90,7 @@ function CalendarPicker({ value, onChange, onClose }: { value: string; onChange:
 
 export function AnnouncementPage() {
   const { announcements, addAnnouncement, deleteAnnouncement, updateAnnouncement } = useOperations();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { globalSearchQuery: searchQuery } = useSearch();
   const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
     title: '',
@@ -122,10 +133,7 @@ export function AnnouncementPage() {
   }, []);
 
   const itemsPerPage = 5;
-  const filteredAnnouncements = announcements.filter((announcement: any) =>
-    announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    announcement.audience.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredAnnouncements = useMemo(() => searchAnnouncements(announcements, searchQuery), [announcements, searchQuery]);
 
   const totalPages = Math.ceil(filteredAnnouncements.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -305,13 +313,6 @@ export function AnnouncementPage() {
       <div className="ops-announcement-main">
         <OperationsHeader />
         <div className="ops-announcement-content">
-          <div className="ops-announcement-search-wrapper">
-            <SearchIcon className="ops-announcement-search-icon" />
-            <input type="text" placeholder="Search by announcements..." value={searchQuery} onChange={e => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1);
-          }} className="ops-announcement-search-input" />
-          </div>
           <h1 className="ops-announcement-title">Announcement</h1>
           <div className="ops-announcement-create-section">
             <h2 className="ops-announcement-section-title">

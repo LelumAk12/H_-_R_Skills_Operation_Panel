@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
-import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { CheckCircle } from 'lucide-react';
 import { useOperations } from '../context/OperationsContext';
@@ -77,7 +76,9 @@ export function OperationsSettingsPage() {
     <div className="ops-settings-page">
       <OperationsSidebar />
       <div className="ops-settings-main">
-        <OperationsHeader />
+        <div className="ops-settings-header-bar">
+          <h1 className="ops-settings-page-title">Settings</h1>
+        </div>
         <div className="ops-settings-content">
           {showSuccessMessage && (
             <div className="ops-settings-success-message">
@@ -85,8 +86,6 @@ export function OperationsSettingsPage() {
               <span>Settings saved successfully!</span>
             </div>
           )}
-          <h1 className="ops-settings-title">Settings</h1>
-          
           <div className="ops-settings-section">
             <h2 className="ops-settings-section-title">Platform Branding</h2>
             <div className="ops-settings-form">

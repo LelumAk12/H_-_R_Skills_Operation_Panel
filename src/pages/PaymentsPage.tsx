@@ -2,12 +2,23 @@ import { useState, useMemo, useEffect } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
 import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
-import { SearchIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { useSearch } from '../context/SearchContext';
 import '../styles/PaymentsPage.css';
+
+// Search function for filtering transactions
+const searchTransactions = (transactions: any[], query: string) => {
+  if (!query.trim()) return transactions;
+  const lowerQuery = query.toLowerCase();
+  return transactions.filter(transaction =>
+    transaction.name.toLowerCase().includes(lowerQuery) ||
+    transaction.course.toLowerCase().includes(lowerQuery)
+  );
+};
 
 export function PaymentsPage() {
   const [activeTab, setActiveTab] = useState<'student' | 'lecture'>('student');
-  const [searchQuery, setSearchQuery] = useState('');
+  const { globalSearchQuery: searchQuery } = useSearch();
   const [timeFilter, setTimeFilter] = useState('Last 30 days');
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -149,17 +160,17 @@ export function PaymentsPage() {
     }
   }, [timeFilter]);
 
-  const filteredTransactions = currentTransactions.filter(trans => {
+  const filteredTransactions = useMemo(() => currentTransactions.filter(trans => {
     // search match
-    const searchMatch = trans.name.toLowerCase().includes(searchQuery.toLowerCase()) || trans.course.toLowerCase().includes(searchQuery.toLowerCase());
-    if (!searchMatch) return false;
+    const searchedTransactions = searchTransactions([trans], searchQuery);
+    if (searchedTransactions.length === 0) return false;
     // exclude refunded (namespace by tab to avoid collisions)
     const key = `${activeTab}:${trans.id}`;
     if (refundedIds.includes(key)) return false;
     // time filter match — use isoDate if present
     const tDate = trans.isoDate ? new Date(trans.isoDate) : new Date(trans.date);
     return tDate >= cutoffDate;
-  });
+  }), [currentTransactions, searchQuery, refundedIds, activeTab, cutoffDate]);
 
   const totalPages = Math.ceil(filteredTransactions.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -175,7 +186,6 @@ export function PaymentsPage() {
   const handleTabChange = (tab: 'student' | 'lecture') => {
     setActiveTab(tab);
     setCurrentPage(1);
-    setSearchQuery('');
   };
   return <>
     <div className="ops-payments-page">
@@ -183,13 +193,6 @@ export function PaymentsPage() {
       <div className="ops-payments-main">
         <OperationsHeader />
         <div className="ops-payments-content">
-          <div className="ops-payments-search-wrapper">
-            <SearchIcon className="ops-payments-search-icon" />
-            <input type="text" placeholder="Search by name or course..." value={searchQuery} onChange={e => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1);
-          }} className="ops-payments-search-input" />
-          </div>
           <h1 className="ops-payments-title">Payments</h1>
           <div className="ops-payments-tabs">
             <button onClick={() => handleTabChange('student')} className={`ops-payments-tab ${activeTab === 'student' ? 'active' : ''}`}>

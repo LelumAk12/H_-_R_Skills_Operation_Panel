@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { OperationsSidebar } from '../components/OperationsSidebar';
-import { OperationsHeader } from '../components/OperationsHeader';
 import { OperationsFooter } from '../components/OperationsFooter';
 import { BellIcon, EyeIcon, XIcon } from 'lucide-react';
 import '../styles/OperationsNotificationsPage.css';
@@ -29,9 +28,10 @@ export function OperationsNotificationsPage() {
     <div className="ops-notifications-page">
       <OperationsSidebar />
       <div className="ops-notifications-main">
-        <OperationsHeader />
+        <div className="ops-notifications-header-bar">
+          <h1 className="ops-notifications-page-title">Notifications</h1>
+        </div>
         <div className="ops-notifications-content">
-          <h1 className="ops-notifications-title">Notifications</h1>
           <div className="ops-notifications-list">
             {notifications.map(notification => <div key={notification.id} className={`ops-notification-card ${notification.read ? 'read' : 'unread'}`}>
                 <div className="ops-notification-icon-wrapper">
